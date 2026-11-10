@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { advancedMissionPack } from "./advancedMissions";
+import MissionScene from "./components/MissionScene";
 import {
   isSupabaseConfigured,
   signIn,
@@ -213,13 +214,13 @@ function App() {
     } finally { setBusy(false); }
   };
 
-  if (loadingProfile) return <div className="auth-shell"><div className="auth-card card"><div className="eyebrow">RISK COMMAND v1.2</div><h1>Conectando...</h1><p>Verificando tu sesión de estudiante.</p></div></div>;
+  if (loadingProfile) return <div className="auth-shell"><div className="auth-card card"><div className="eyebrow">RISK COMMAND v1.3</div><h1>Conectando...</h1><p>Verificando tu sesión de estudiante.</p></div></div>;
 
   if (!profile) {
     return (
       <div className="auth-shell">
         <div className="auth-card card">
-          <div className="brand">RISK <span>COMMAND</span><small>v1.2 • Student Operations</small></div>
+          <div className="brand">RISK <span>COMMAND</span><small>v1.3 • Student Operations</small></div>
           <div className="eyebrow">CENTRO DE IDENTIFICACIÓN</div>
           <h1>{authMode === "login" ? "Ingresa a tu operación" : "Registra tu identidad"}</h1>
           <p className="auth-copy">{isSupabaseConfigured ? "Tus misiones y XP se guardarán en la base de datos central." : "Modo local activo. Puedes probar el sistema mientras configuras Supabase."}</p>
@@ -244,9 +245,10 @@ function App() {
   if (view === "mission" && selectedMission) {
     return (
       <div className="app-shell">
-        <header className="topbar"><div className="brand">RISK <span>COMMAND</span><small>v1.2 • Student Operations</small></div><button className="ghost" onClick={()=>setView("missions")}>← Volver a misiones</button></header>
+        <header className="topbar"><div className="brand">RISK <span>COMMAND</span><small>v1.3 • Student Operations</small></div><button className="ghost" onClick={()=>setView("missions")}>← Volver a misiones</button></header>
         <main className="mission-screen">
           <section className="mission-hero"><div className="mission-icon">{selectedMission.icon}</div><div><div className="eyebrow">{selectedMission.region} • {selectedMission.difficulty}</div><h1>{selectedMission.title}</h1><p>{selectedMission.subtitle}</p></div><div className="xp-pill">+{selectedMission.xp} XP base</div></section>
+          <MissionScene mission={selectedMission} answers={answers} />
           <section className="briefing card"><div className="section-title">📋 BRIEFING OPERATIVO</div><ul>{selectedMission.briefing.map((item,i)=><li key={i}>{item}</li>)}</ul><p><strong>Objetivo:</strong> {selectedMission.mission}</p></section>
           <section className="questions">
             {selectedMission.questions.map((q,i)=><div className="question card" key={q.id}><div className="eyebrow">DECISIÓN {i+1}</div><h2>{q.prompt}</h2><div className="options">{q.options.map((o,j)=><button key={j} className={answers[q.id]===j?"option selected":"option"} onClick={()=>choose(q.id,j)}>{String.fromCharCode(65+j)}. {o}</button>)}</div></div>)}
@@ -258,14 +260,14 @@ function App() {
   }
 
   if (view === "result" && result) {
-    return <div className="app-shell"><header className="topbar"><div className="brand">RISK <span>COMMAND</span><small>v1.2 • Debrief</small></div><button className="ghost" onClick={()=>setView("missions")}>← Misiones</button></header>
+    return <div className="app-shell"><header className="topbar"><div className="brand">RISK <span>COMMAND</span><small>v1.3 • Debrief</small></div><button className="ghost" onClick={()=>setView("missions")}>← Misiones</button></header>
       <main className="result-screen"><div className="result-card card"><div className="eyebrow">DEBRIEF COMPLETADO</div><h1>{result.score >= 67 ? "Operación aprobada" : "Operación en revisión"}</h1><div className="score">{result.score}<small>/100</small></div><p>{result.correct} de {result.total} decisiones correctas.</p><div className="earned">+{result.earned} XP</div><p className="result-note">{result.improved ? "Tu resultado mejora tu mejor marca en esta misión." : "Resultado registrado. La bonificación completa se obtiene al superar tu mejor marca."}</p><div className="result-actions"><button className="primary" onClick={()=>setView("missions")}>CONTINUAR</button><button className="ghost" onClick={()=>setView("ranking")}>VER CLASIFICACIÓN</button></div></div></main></div>;
   }
 
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div className="brand">RISK <span>COMMAND</span><small>v1.2 • Student Operations</small></div>
+        <div className="brand">RISK <span>COMMAND</span><small>v1.3 • Student Operations</small></div>
         <nav>
           <button className={view==="dashboard"?"nav-active":""} onClick={()=>setView("dashboard")}>Centro</button>
           <button className={view==="missions"?"nav-active":""} onClick={()=>setView("missions")}>Misiones</button>
