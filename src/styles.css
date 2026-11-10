@@ -28,3 +28,97 @@
 .scene-progress{height:4px;background:#15272f;margin-top:10px;border-radius:9px;overflow:hidden}.scene-progress span{display:block;height:100%;background:linear-gradient(90deg,#3f8d80,var(--accent));transition:width .3s ease}.scene-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.scene-metric{background:#0b1821;border:1px solid #1d333e;border-radius:9px;padding:10px}.scene-metric-label{display:flex;justify-content:space-between;gap:10px;font-size:9px;color:#9fb0b7;margin-bottom:7px}.scene-metric-label span{display:flex;align-items:center;gap:5px}.scene-metric-label strong{font-family:"Barlow Condensed";font-size:16px;color:var(--accent)}.metric-track{height:5px;background:#152730;border-radius:9px;overflow:hidden}.metric-track span{display:block;height:100%;background:var(--accent);transition:width .4s ease}
 @media(max-width:760px){.scene-head{align-items:flex-start;flex-direction:column}.scene-status{align-self:flex-start}.scene-canvas{height:230px}.scene-metrics{grid-template-columns:1fr}.command-table{left:7%;width:150px}.budget-stack{right:8%;height:140px}.scene-house.house-a{left:52%}.scene-house.house-b{left:66%}.scene-school{left:54%;font-size:34px}.scene-health{left:70%;font-size:34px}.message-one{left:45%;top:78px}.message-two{left:54%;top:132px}.command-card{font-size:8px}.card-a{left:5%;top:42px}.card-b{right:5%;top:42px}.card-c{left:7%;bottom:30px}.card-d{right:7%;bottom:30px}.scene-alert-marker{bottom:10px;max-width:86%;overflow:hidden;text-overflow:ellipsis}.hud-right{display:none}}
 @media(max-width:480px){.mission-scene{padding:12px}.scene-canvas{height:205px}.scene-hud{top:8px}.hud-left{left:8px}.scene-rain{right:6%;top:36px}.scene-mountain{left:12%;width:150px}.scene-road{width:82%;left:9%}.command-table{top:62px;left:5%;width:132px;padding:12px}.command-table strong{font-size:24px}.budget-stack{right:5%;height:118px;gap:7px}.budget-stack span{width:35px}.bridge{left:8%;right:8%}.route-main{left:12%;width:66%}.route-alt{left:18%;width:58%}.radio-tower{left:12%;bottom:42px}.message-one{left:40%;top:66px}.message-two{left:48%;top:122px}.command-network{transform:translate(-50%,-50%) scale(.82)}.command-card{padding:6px 7px}.card-a{left:2%;top:37px}.card-b{right:2%;top:37px}.card-c{left:3%;bottom:28px}.card-d{right:3%;bottom:28px}}
+
+/* =========================================
+   MISSION REWARD HUD
+   ========================================= */
+
+.mission-reward {
+    margin-top: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(10, 18, 30, 0.82);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.22);
+}
+
+.mission-reward__header {
+    padding: 10px 14px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.65);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mission-reward__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.mission-reward__xp,
+.mission-reward__score {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+}
+
+.mission-reward__xp {
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mission-reward__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.07);
+    font-size: 1.2rem;
+}
+
+.mission-reward__label {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.mission-reward__xp strong,
+.mission-reward__score strong {
+    display: block;
+    font-size: 1.25rem;
+    line-height: 1.1;
+}
+
+.mission-reward__status {
+    padding: 9px 14px;
+    text-align: center;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    background: rgba(255, 255, 255, 0.045);
+    color: rgba(255, 255, 255, 0.72);
+}
+
+/* Responsive */
+
+@media (max-width: 480px) {
+    .mission-reward__content {
+        grid-template-columns: 1fr;
+    }
+
+    .mission-reward__xp {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mission-reward__xp,
+    .mission-reward__score {
+        padding: 13px;
+    }
+}
