@@ -5,7 +5,7 @@ export const advancedMissionPack = [
     subtitle: "Cordillera Andina — escenario académico simulado",
     region: "Colombia",
     difficulty: "Avanzado",
-    xp: 220,
+    maxXP: 220,
     icon: "⛰️",
     tags: ["Amenaza", "Exposición", "Vulnerabilidad", "Incertidumbre"],
     briefing: [
@@ -57,7 +57,7 @@ export const advancedMissionPack = [
     subtitle: "Cuenca urbana — escenario académico simulado",
     region: "Colombia",
     difficulty: "Avanzado",
-    xp: 240,
+    maxXP: 240,
     icon: "🌊",
     tags: ["Exposición", "Vulnerabilidad", "Capacidad"],
     briefing: [
@@ -109,7 +109,7 @@ export const advancedMissionPack = [
     subtitle: "Municipio intermedio — escenario académico simulado",
     region: "Colombia",
     difficulty: "Experto",
-    xp: 280,
+    maxXP: 280,
     icon: "💰",
     tags: ["Reducción", "Presupuesto", "Medidas", "Riesgo residual"],
     briefing: [
@@ -162,7 +162,7 @@ export const advancedMissionPack = [
     subtitle: "Corredor logístico — escenario académico simulado",
     region: "Escenario internacional",
     difficulty: "Experto",
-    xp: 300,
+    maxXP: 300,
     icon: "🚑",
     tags: ["Continuidad", "Evacuación", "Logística", "Coordinación"],
     briefing: [
@@ -215,7 +215,7 @@ export const advancedMissionPack = [
     subtitle: "Red de información — escenario académico simulado",
     region: "Escenario internacional",
     difficulty: "Avanzado",
-    xp: 260,
+    maxXP: 260,
     icon: "📡",
     tags: ["Comunicación", "Incertidumbre", "Desinformación", "Accesibilidad"],
     briefing: [
@@ -268,7 +268,7 @@ export const advancedMissionPack = [
     subtitle: "Consejo territorial — escenario académico simulado",
     region: "Escenario internacional",
     difficulty: "Experto",
-    xp: 340,
+    maxXP: 340,
     icon: "🧭",
     tags: ["Multiamenaza", "Gobernanza", "Preparación", "Recuperación"],
     briefing: [

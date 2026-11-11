@@ -1,7 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { advancedMissionPack } from "./advancedMissions";
-import MissionScene from "./components/MissionScene";
 import MissionReward from "./components/MissionReward";
+import OperationalMap from "./components/OperationalMap";
+import { scenarios, M01 } from "./data/scenarios";
+import { createInitialScenarioState, applyDecision, buildDecisionRecord, getAvailableDecisions } from "./engine/scenarioEngine";
+import { calculateScore, calculateMissionXP } from "./engine/scoringEngine";
+import { evaluateScenario } from "./engine/scenarioEvaluator";
+import DecisionCenter from "./components/DecisionCenter";
+import CommandHUD from "./components/CommandHUD";
+import DecisionFeedback from "./components/DecisionFeedback";
+import Debrief from "./components/Debrief";
+
 import {
   isSupabaseConfigured,
   signIn,
@@ -10,6 +19,7 @@ import {
   getProfile,
   saveProfile,
   getLeaderboard,
+  getMissionAttempts,
   recordMissionAttempt
 } from "./lib/supabaseApi";
 import "./styles.css";
@@ -24,7 +34,7 @@ const RANKS = [
 
 const LOCAL_KEY = "risk-command-v1.2-local";
 const SESSION_KEY = "risk-command-v1.2-session";
-const emptyLocal = { profile: null, xp: 0, completed: [], bestScores: {}, attempts: 0 };
+const emptyLocal = { profile: null, xp: 0, completed: [], bestScores: {}, attempts: 0, missionStats: {} };
 
 function rankFor(xp) {
   return [...RANKS].reverse().find((r) => xp >= r.min) || RANKS[0];
@@ -53,11 +63,55 @@ function saveLocalUser(state) {
   if (!profile) return;
   const users = JSON.parse(localStorage.getItem("risk-command-v1.2-local-users") || "[]");
   const key = profile.id;
-  const next = { ...profile, xp: state.xp, best_scores: state.bestScores, attempts: state.attempts };
+  const next = { ...profile, xp: state.xp, best_scores: state.bestScores, attempts: state.attempts, mission_stats: state.missionStats };
   const index = users.findIndex((u) => u.id === key);
   if (index >= 0) users[index] = next; else users.push(next);
   localStorage.setItem("risk-command-v1.2-local-users", JSON.stringify(users));
   localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
+}
+
+function buildMissionStats(rows = []) {
+    return rows.reduce((acc, row) => {
+        const id = row.mission_id;
+        if (!id) return acc;
+
+        const current = acc[id] || {
+            attempts: 0,
+            totalXp: 0,
+            lastXp: 0,
+            lastScore: null,
+            bestScore: null,
+            improvedLast: false,
+            lastPlayedAt: null,
+        };
+
+        current.attempts += 1;
+
+        if (current.lastPlayedAt === null) {
+            current.lastXp = Number(row.xp_earned || 0);
+            current.lastScore =
+                row.score == null ? null : Number(row.score);
+
+            current.improvedLast =
+                Boolean(row.improved);
+
+            current.lastPlayedAt =
+                row.created_at || null;
+        }
+
+        current.bestScore = Math.max(
+            current.bestScore ?? -1,
+            Number(row.score ?? -1)
+        );
+
+        current.totalXp = Math.max(
+            current.totalXp,
+            Number(row.cumulative_xp || 0)
+        );
+
+        acc[id] = current;
+        return acc;
+    }, {});
 }
 
 function App() {
@@ -70,15 +124,20 @@ function App() {
   const [busy, setBusy] = useState(false);
   const [view, setView] = useState("dashboard");
   const [selectedMission, setSelectedMission] = useState(null);
-  const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
+  const [decisionHistory, setDecisionHistory] = useState([]);
   const [filter, setFilter] = useState("Todas");
   const [loadingProfile, setLoadingProfile] = useState(isSupabaseConfigured);
+  const [scenarioState, setScenarioState] = useState(() => createInitialScenarioState(M01));
+  const [scenarioInitialState, setScenarioInitialState] = useState(() => createInitialScenarioState(M01));
+  const [scenarioPhase, setScenarioPhase] = useState("INITIAL");
+  const [lastDecision, setLastDecision] = useState(null);
 
   const xp = isSupabaseConfigured ? (profile?.xp || 0) : localState.xp;
   const completed = isSupabaseConfigured ? (profile?.completed || []) : localState.completed;
   const bestScores = isSupabaseConfigured ? (profile?.best_scores || {}) : localState.bestScores;
   const attempts = isSupabaseConfigured ? (profile?.attempts || 0) : localState.attempts;
+  const missionStats = localState.missionStats || {};
   const rank = rankFor(xp);
   const nextRank = RANKS.find((r) => r.min > xp);
   const progress = nextRank ? Math.min(100, ((xp - rank.min) / (nextRank.min - rank.min)) * 100) : 100;
@@ -98,10 +157,17 @@ function App() {
     }
     const token = localStorage.getItem(SESSION_KEY);
     if (!token) { setLoadingProfile(false); return; }
-    getProfile(token).then((p) => {
-      if (p) setProfile(p);
-      else localStorage.removeItem(SESSION_KEY);
-    }).catch(() => localStorage.removeItem(SESSION_KEY)).finally(() => setLoadingProfile(false));
+    Promise.all([getProfile(token), getMissionAttempts(token)])
+      .then(([p, attemptsRows]) => {
+        if (!p) {
+          localStorage.removeItem(SESSION_KEY);
+          return;
+        }
+        setProfile(p);
+        setLocalState((current) => ({ ...current, missionStats: buildMissionStats(attemptsRows || []) }));
+      })
+      .catch(() => localStorage.removeItem(SESSION_KEY))
+      .finally(() => setLoadingProfile(false));
   }, []);
 
   useEffect(() => {
@@ -111,19 +177,45 @@ function App() {
     }
   }, [profile, xp]);
 
-  const updateAuth = (key, value) => setAuthForm((f) => ({ ...f, [key]: value }));
+    const updateAuth = (key, value) => setAuthForm((f) => ({ ...f, [key]: value }));
+
+    const handleScenarioDecision = (decision) => {
+        if (!decision) return;
+
+        setScenarioState((current) => {
+            const result = applyDecision(current, decision);
+            const record = buildDecisionRecord({ result, phaseBefore: scenarioPhase });
+            setDecisionHistory((history) => [...history, record]);
+            setScenarioPhase(result.phase || scenarioPhase);
+            setLastDecision({ ...record, consequence: decision.consequence || "" });
+            return result.state;
+        });
+    };
 
   const handleAuth = async (e) => {
     e.preventDefault();
     setBusy(true); setAuthError("");
     try {
       if (isSupabaseConfigured) {
-        if (authMode === "login") {
-          const session = await signIn(authForm.name.trim(), authForm.lastName.trim(), authForm.password);
-          localStorage.setItem(SESSION_KEY, session.access_token);
-          const p = await getProfile(session.access_token);
-          setProfile(p);
-        } else {
+          if (authMode === "login") {
+              const session = await signIn(
+                  authForm.name.trim(),
+                  authForm.lastName.trim(),
+                  authForm.password
+              );
+
+              localStorage.setItem(SESSION_KEY, session.access_token);
+
+              const p = await getProfile(session.access_token);
+              const attemptsRows = await getMissionAttempts(session.access_token);
+
+              setProfile(p);
+
+              setLocalState((current) => ({
+                  ...current,
+                  missionStats: buildMissionStats(attemptsRows || [])
+              }));
+          } else {
           const session = await signUp({
             name: authForm.name.trim(),
             lastName: authForm.lastName.trim(),
@@ -146,7 +238,7 @@ function App() {
           if (!user) throw new Error("Nombre, apellido o contraseña incorrectos.");
           const state = {
             profile: user, xp:user.xp || 0, completed:user.completed || [],
-            bestScores:user.best_scores || {}, attempts:user.attempts || 0
+            bestScores:user.best_scores || {}, attempts:user.attempts || 0, missionStats:user.mission_stats || {}
           };
           setLocalState(state); setProfile(user);
           localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
@@ -157,10 +249,10 @@ function App() {
           const users = JSON.parse(localStorage.getItem("risk-command-v1.2-local-users") || "[]");
           const user = {
             id: crypto.randomUUID(), full_name:`${authForm.name.trim()} ${authForm.lastName.trim()}`,
-            xp:0, completed:[], best_scores:{}, attempts:0, local_password:authForm.password
+            xp:0, completed:[], best_scores:{}, attempts:0, mission_stats:{}, local_password:authForm.password
           };
           users.push(user); localStorage.setItem("risk-command-v1.2-local-users", JSON.stringify(users));
-          const state = { profile:user, xp:0, completed:[], bestScores:{}, attempts:0 };
+          const state = { profile:user, xp:0, completed:[], bestScores:{}, attempts:0, missionStats:{} };
           setLocalState(state); setProfile(user); localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
         }
       }
@@ -174,45 +266,131 @@ function App() {
     setProfile(null); setView("dashboard"); setSelectedMission(null);
   };
 
-  const startMission = (mission) => { setSelectedMission(mission); setAnswers({}); setResult(null); setView("mission"); };
-  const choose = (questionId, option) => setAnswers((a) => ({ ...a, [questionId]: option }));
+  const startMission = (mission) => {
+    setSelectedMission(mission);
+    setResult(null);
 
-  const submitMission = async () => {
-    const mission = selectedMission;
-    const correct = mission.questions.filter((q) => answers[q.id] === q.answer).length;
-    const total = mission.questions.length;
-    const score = Math.round((correct / total) * 100);
+    const scenario = scenarios[mission.id] || M01;
+    const initial = createInitialScenarioState(scenario);
+
+    setScenarioInitialState(initial);
+    setScenarioState(initial);
+    setScenarioPhase(scenario.initialSituation?.phase || "INITIAL");
+    setDecisionHistory([]);
+    setLastDecision(null);
+    setView("mission");
+  };
+
+  const finishMission = async () => {
+    if (!selectedMission) return;
+
+    const currentScenario =
+        scenarios[selectedMission.id];
+
+    const scoreResult = calculateScore({
+        initialState: scenarioInitialState,
+        finalState: scenarioState,
+        decisionHistory,
+        scenario: currentScenario,
+    });
+
+    const score = scoreResult.total;
+    const outcome = evaluateScenario({
+      score,
+      finalState: scenarioState,
+      phase: scenarioPhase,
+      decisionHistory,
+    });
+
     setBusy(true);
     try {
-      let operation;
+        const previousBest = bestScores[selectedMission.id] ?? -1;
+
+        const xpResult = calculateMissionXP({
+            maxXP: selectedMission.max_xp ?? selectedMission.xp ?? 0,
+            score,
+            previousBestScore: previousBest < 0 ? 0 : previousBest,
+        });
+
+        const earnedLocal = xpResult.earned;
+        const improved = xpResult.improved;
+
+      let earned = earnedLocal;
+      let improvedResult = improved;
+
       if (isSupabaseConfigured) {
         const token = localStorage.getItem(SESSION_KEY);
-        operation = await recordMissionAttempt(token, mission.id, score, correct, total);
+        // Compatibility bridge: the current database RPC still expects
+        // correct/total from the old quiz model. We encode the score as
+        // a percentage until the scenario_attempts schema is migrated.
+        const operation = await recordMissionAttempt(
+            token,
+            selectedMission.id,
+            score
+        );
+        earned = operation.awarded || operation.xp_earned || earnedLocal;
+        improvedResult = operation.improved ?? improved;
+        const refreshedAttempts = await getMissionAttempts(token);
+        setLocalState((current) => ({ ...current, missionStats: buildMissionStats(refreshedAttempts || []) }));
         const p = await getProfile(token);
         setProfile(p);
-        const board = await getLeaderboard(); setLeaderboard(board);
+        const board = await getLeaderboard();
+        setLeaderboard(board);
       } else {
-        const baseEarned = Math.round(mission.xp * (0.45 + (correct / total) * 0.55));
-        const bonus = score === 100 ? 80 : score >= 67 ? 35 : 0;
-        const earned = baseEarned + bonus;
-        const previousBest = localState.bestScores[mission.id] ?? -1;
-        const improved = score > previousBest;
-        const awarded = improved ? earned : Math.round(earned * 0.35);
-        const next = {
-          ...localState, xp:localState.xp + awarded,
-          completed:localState.completed.includes(mission.id) ? localState.completed : [...localState.completed, mission.id],
-          bestScores:{...localState.bestScores, [mission.id]:Math.max(previousBest, score)},
-          attempts:localState.attempts + 1
+        const previousStats = localState.missionStats?.[selectedMission.id] || {
+          attempts: 0,
+          totalXp: 0,
+          lastXp: 0,
+          lastScore: null,
+          bestScore: previousBest,
+          improvedLast: false,
+          lastPlayedAt: null,
         };
-        setLocalState(next); saveLocalUser(next); setProfile(next.profile);
-        setLeaderboard(localLeaderboard({ ...next.profile, xp:next.xp }));
-        operation = { ...next, awarded, improved, correct, total, score };
+        const next = {
+          ...localState,
+          xp: localState.xp + earnedLocal,
+          completed: localState.completed.includes(selectedMission.id)
+            ? localState.completed
+            : [...localState.completed, selectedMission.id],
+          bestScores: {
+            ...localState.bestScores,
+            [selectedMission.id]: Math.max(previousBest, score),
+          },
+          attempts: localState.attempts + 1,
+          missionStats: {
+            ...localState.missionStats,
+            [selectedMission.id]: {
+              ...previousStats,
+              attempts: previousStats.attempts + 1,
+              totalXp: previousStats.totalXp + earnedLocal,
+              lastXp: earnedLocal,
+              lastScore: score,
+              bestScore: Math.max(previousStats.bestScore ?? -1, score),
+              improvedLast: improved,
+              lastPlayedAt: new Date().toISOString(),
+            },
+          },
+        };
+        setLocalState(next);
+        saveLocalUser(next);
+        setProfile(next.profile);
+        setLeaderboard(localLeaderboard({ ...next.profile, xp: next.xp }));
       }
-      setResult({ correct, total, score, earned: operation.awarded || operation.xp_earned || 0, improved: operation.improved ?? true });
+
+      setResult({
+        score,
+        breakdown: scoreResult,
+        outcome,
+        earned,
+        improved: improvedResult,
+        decisionCount: decisionHistory.length,
+      });
       setView("result");
     } catch (err) {
       setAuthError(err.message || "No fue posible guardar el intento.");
-    } finally { setBusy(false); }
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (loadingProfile) return <div className="auth-shell"><div className="auth-card card"><div className="eyebrow">RISK COMMAND v1.3</div><h1>Conectando...</h1><p>Verificando tu sesión de estudiante.</p></div></div>;
@@ -243,26 +421,133 @@ function App() {
     );
   }
 
-  if (view === "mission" && selectedMission) {
-    return (
-      <div className="app-shell">
-        <header className="topbar"><div className="brand">RISK <span>COMMAND</span><small>v1.3 • Student Operations</small></div><button className="ghost" onClick={()=>setView("missions")}>← Volver a misiones</button></header>
-        <main className="mission-screen">
-          <section className="mission-hero"><div className="mission-icon">{selectedMission.icon}</div><div><div className="eyebrow">{selectedMission.region} • {selectedMission.difficulty}</div><h1>{selectedMission.title}</h1><p>{selectedMission.subtitle}</p></div><div className="xp-pill">+{selectedMission.xp} XP base</div></section>
-          <MissionScene mission={selectedMission} answers={answers} />
-          <section className="briefing card"><div className="section-title">📋 BRIEFING OPERATIVO</div><ul>{selectedMission.briefing.map((item,i)=><li key={i}>{item}</li>)}</ul><p><strong>Objetivo:</strong> {selectedMission.mission}</p></section>
-          <section className="questions">
-            {selectedMission.questions.map((q,i)=><div className="question card" key={q.id}><div className="eyebrow">DECISIÓN {i+1}</div><h2>{q.prompt}</h2><div className="options">{q.options.map((o,j)=><button key={j} className={answers[q.id]===j?"option selected":"option"} onClick={()=>choose(q.id,j)}>{String.fromCharCode(65+j)}. {o}</button>)}</div></div>)}
-          </section>
-          <button className="primary wide" disabled={Object.keys(answers).length < selectedMission.questions.length || busy} onClick={submitMission}>{busy ? "GUARDANDO RESULTADO..." : "CONFIRMAR OPERACIÓN"}</button>
-        </main>
-      </div>
-    );
-  }
+    if (view === "mission" && selectedMission) {
+        const isSimulation = selectedMission.id === "M-01";
+
+        return (
+            <div className="app-shell">
+
+                <header className="topbar">
+                    <div className="brand">
+                        RISK <span>COMMAND</span>
+                        <small>v1.3 • Student Operations</small>
+                    </div>
+
+                    <button
+                        className="ghost"
+                        onClick={() => setView("missions")}
+                    >
+                        ← Volver a misiones
+                    </button>
+                </header>
+
+                <main className="mission-screen">
+
+                    <section className="mission-hero">
+
+                        <div className="mission-icon">
+                            {selectedMission.icon}
+                        </div>
+
+                        <div>
+                            <div className="eyebrow">
+                                {selectedMission.region} • {selectedMission.difficulty}
+                            </div>
+
+                            <h1>
+                                {selectedMission.title}
+                            </h1>
+
+                            <p>
+                                {selectedMission.subtitle}
+                            </p>
+                        </div>
+
+                        <MissionReward
+                            maxXP={selectedMission.maxXP}
+                            bestScore={bestScores[selectedMission.id]}
+                        />
+
+                    </section>
+
+                    {isSimulation ? (
+                        <>
+                            <CommandHUD
+                                scenarioState={scenarioState}
+                                scenarioPhase={scenarioPhase}
+                            />
+
+                            <OperationalMap
+                                scenarioState={scenarioState}
+                                scenarioPhase={scenarioPhase}
+                            />
+
+                            <DecisionCenter
+                                decisions={getAvailableDecisions(
+                                    scenarios[selectedMission.id] || M01,
+                                    scenarioPhase,
+                                    scenarioState
+                                )}
+                                onDecision={handleScenarioDecision}
+                                disabled={false}
+                            />
+
+                            {lastDecision && (
+                                <DecisionFeedback decision={lastDecision} />
+                            )}
+
+                            <div className="mission-actions">
+                                {scenarioPhase === "OUTCOME" ? (
+                                    <button
+                                        className="primary"
+                                        onClick={finishMission}
+                                        disabled={busy}
+                                    >
+                                        {busy ? "EVALUANDO..." : "FINALIZAR Y EVALUAR OPERACIÓN"}
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="ghost"
+                                        onClick={() => setView("missions")}
+                                    >
+                                        SALIR DE LA SIMULACIÓN
+                                    </button>
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <section className="simulation-coming-soon card">
+
+                            <div className="eyebrow">
+                                SIMULACIÓN EN DESARROLLO
+                            </div>
+
+                            <h2>
+                                Este escenario será migrado al nuevo sistema operativo.
+                            </h2>
+
+                            <p>
+                                Las misiones restantes dejarán de utilizar
+                                cuestionarios y serán transformadas progresivamente
+                                en escenarios interactivos.
+                            </p>
+
+                        </section>
+                    )}
+
+                </main>
+            </div>
+        );
+    }
 
   if (view === "result" && result) {
-    return <div className="app-shell"><header className="topbar"><div className="brand">RISK <span>COMMAND</span><small>v1.3 • Debrief</small></div><button className="ghost" onClick={()=>setView("missions")}>← Misiones</button></header>
-      <main className="result-screen"><div className="result-card card"><div className="eyebrow">DEBRIEF COMPLETADO</div><h1>{result.score >= 67 ? "Operación aprobada" : "Operación en revisión"}</h1><div className="score">{result.score}<small>/100</small></div><p>{result.correct} de {result.total} decisiones correctas.</p><div className="earned">+{result.earned} XP</div><p className="result-note">{result.improved ? "Tu resultado mejora tu mejor marca en esta misión." : "Resultado registrado. La bonificación completa se obtiene al superar tu mejor marca."}</p><div className="result-actions"><button className="primary" onClick={()=>setView("missions")}>CONTINUAR</button><button className="ghost" onClick={()=>setView("ranking")}>VER CLASIFICACIÓN</button></div></div></main></div>;
+    return (
+      <Debrief
+        result={result}
+        onContinue={() => setView("missions")}
+        onRanking={() => setView("ranking")}
+      />
+    );
   }
 
   return (
@@ -287,7 +572,15 @@ function App() {
         <section className="card quick-ranking"><div className="section-title">🏆 TOP 5 — CLASIFICACIÓN</div>{leaderboard.slice(0,5).map((s,i)=><div className="rank-row" key={s.id}><b>#{i+1}</b><span>{s.full_name}{s.id===profile.id?" (Tú)":""}</span><strong>{s.xp || 0} XP</strong></div>)}{leaderboard.length===0 && <p className="muted">Aún no hay registros en la clasificación.</p>}<button className="ghost" onClick={()=>setView("ranking")}>Ver clasificación completa →</button></section>
       </main>}
 
-          {view === "missions" && <main className="main"><div className="page-title"><div><div className="eyebrow">OPERACIONES DISPONIBLES</div><h1>Misiones</h1><p>Escenarios académicos simulados de gestión del riesgo.</p></div><div className="filters">{["Todas", "Avanzado", "Experto"].map(f => <button key={f} className={filter === f ? "filter active" : "filter"} onClick={() => setFilter(f)}>{f}</button>)}</div></div><div className="mission-grid">{filtered.map(m => <article className="mission-card card" key={m.id}><div className="mission-top"><span className="mission-mini">{m.icon}</span><span className="difficulty">{m.difficulty}</span></div><h2>{m.title}</h2><p>{m.subtitle}</p><div className="tags">{m.tags.map(t => <span key={t}>{t}</span>)}</div><MissionReward xp={m.xp} bestScore={bestScores[m.id]}/><button className="primary wide" onClick={()=>startMission(m)}>{completed.includes(m.id) ? "REPETIR MISIÓN" : "INICIAR MISIÓN"}</button></article>)}</div></main>}
+          {view === "missions" && <main className="main"><div className="page-title"><div><div className="eyebrow">OPERACIONES DISPONIBLES</div><h1>Misiones</h1><p>Escenarios académicos simulados de gestión del riesgo.</p></div><div className="filters">{["Todas", "Avanzado", "Experto"].map(f => <button key={f} className={filter === f ? "filter active" : "filter"} onClick={() => setFilter(f)}>{f}</button>)}</div></div><div className="mission-grid">{filtered.map(m => <article className="mission-card " key={m.id}><div className="mission-top"><span className="mission-mini">{m.icon}</span><span className="difficulty">{m.difficulty}</span></div><h2>{m.title}</h2><p>{m.subtitle}</p><div className="tags">{m.tags.map(t => <span key={t}>{t}</span>)}
+          </div><MissionReward
+                  maxXP={m.maxXP}
+                  bestScore={bestScores[m.id]}
+                  lastXp={missionStats[m.id]?.lastXp}
+                  totalXp={missionStats[m.id]?.totalXp || 0}
+                  attempts={missionStats[m.id]?.attempts || 0}
+                  improvedLast={missionStats[m.id]?.improvedLast || false}
+              /><button className="primary wide" onClick={()=>startMission(m)}>{completed.includes(m.id) ? "REPETIR MISIÓN" : "INICIAR MISIÓN"}</button></article>)}</div></main>}
 
       {view === "ranking" && <main className="main"><div className="page-title"><div><div className="eyebrow">COMPETENCIA ACADÉMICA</div><h1>Tabla de clasificación</h1><p>Ranking general de estudiantes ordenado por XP acumulado.</p></div></div><section className="card leaderboard">{leaderboard.map((s,i)=><div className={"leader-row "+(s.id===profile.id?"me":"")} key={s.id}><div className="place">{i+1}</div><div className="leader-avatar">{rankFor(s.xp||0).icon}</div><div className="leader-name"><strong>{s.full_name}</strong><span>{rankFor(s.xp||0).name}</span></div><strong className="leader-xp">{s.xp||0} XP</strong></div>)}{leaderboard.length===0&&<p className="muted">No hay estudiantes registrados todavía.</p>}</section></main>}
     </div>

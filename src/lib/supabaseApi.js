@@ -89,6 +89,13 @@ export async function saveProfile(token, profile) {
   });
 }
 
+export async function getMissionAttempts(token) {
+  return request(
+    `/rest/v1/mission_attempts?select=mission_id,score,xp_earned,cumulative_xp,improved,created_at&order=created_at.desc`,
+    { token }
+  );
+}
+
 export async function getLeaderboard() {
   return request("/rest/v1/rpc/get_leaderboard", {
     method:"POST",
@@ -97,16 +104,24 @@ export async function getLeaderboard() {
   });
 }
 
-export async function recordMissionAttempt(token, missionId, score, correct, total) {
-  const rows = await request("/rest/v1/rpc/record_mission_attempt", {
-    method:"POST",
+export async function recordMissionAttempt(
     token,
-    body:JSON.stringify({
-      p_mission_id:missionId,
-      p_score:score,
-      p_correct:correct,
-      p_total:total
-    })
-  });
-  return Array.isArray(rows) ? rows[0] : rows;
+    missionId,
+    score
+) {
+    const rows = await request(
+        "/rest/v1/rpc/record_mission_attempt",
+        {
+            method: "POST",
+            token,
+            body: JSON.stringify({
+                p_mission_id: missionId,
+                p_score: score
+            })
+        }
+    );
+
+    return Array.isArray(rows)
+        ? rows[0]
+        : rows;
 }

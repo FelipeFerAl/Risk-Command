@@ -22,11 +22,11 @@ alter table public.profiles drop column if exists group_name;
 create table if not exists public.missions (
   id text primary key,
   title text not null,
-  xp integer not null check (xp > 0),
+  max_xp integer not null check (max_xp > 0),
   active boolean not null default true
 );
 
-insert into public.missions (id, title, xp) values
+insert into public.missions (id, title, max_xp) values
   ('M-01', 'Misión M-01', 220),
   ('M-02', 'Misión M-02', 240),
   ('M-03', 'Misión M-03', 280),
@@ -36,15 +36,24 @@ insert into public.missions (id, title, xp) values
 on conflict (id) do update set xp=excluded.xp, active=true;
 
 create table if not exists public.mission_attempts (
-  id bigint generated always as identity primary key,
-  user_id uuid not null references public.profiles(id) on delete cascade,
-  mission_id text not null references public.missions(id),
-  score integer not null check (score between 0 and 100),
-  correct integer not null check (correct >= 0),
-  total integer not null check (total > 0),
-  xp_earned integer not null default 0 check (xp_earned >= 0),
-  improved boolean not null default true,
-  created_at timestamptz not null default now()
+    id bigint generated always as identity primary key,
+    user_id uuid not null
+        references public.profiles(id)
+        on delete cascade,
+    mission_id text not null
+        references public.missions(id),
+    score integer not null
+        check (score between 0 and 100),
+    xp_earned integer not null
+        default 0
+        check (xp_earned >= 0),
+    cumulative_xp integer not null
+        default 0
+        check (cumulative_xp >= 0),
+    improved boolean not null
+        default true,
+    created_at timestamptz not null
+        default now()
 );
 
 alter table public.profiles enable row level security;

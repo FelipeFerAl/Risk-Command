@@ -111,35 +111,56 @@ function barValue(key, state) {
   return state.capacity;
 }
 
-export default function MissionScene({ mission, answers }) {
-  const config = SCENES[mission.id] || SCENES["M-06"];
-  const state = getScenarioState(mission, answers);
-  const severity = state.risk >= 72 ? "critical" : state.risk >= 55 ? "alert" : "stable";
+export default function MissionScene({ mission, answers, scenarioState, scenarioPhase, }) {
+    const config = SCENES[mission.id] || SCENES["M-06"];
+    const legacyState = getScenarioState(mission, answers);
+    const state = scenarioState
+        ? {
+            ...legacyState,
+            risk: scenarioState.threat ?? legacyState.risk,
+            threat: scenarioState.threat ?? legacyState.risk,
+            exposure: scenarioState.exposure ?? legacyState.exposure,
+            vulnerability: scenarioState.vulnerability ?? 0,
+            capacity: scenarioState.resources ?? legacyState.capacity,
+            response: scenarioState.response ?? 0,
+            time: scenarioState.time ?? 0,
+            mobility: scenarioState.mobility ?? 0,
+            publicPressure: scenarioState.publicPressure ?? 0,
+        }
+        : legacyState;
+
+    const severity =
+        state.threat >= 72
+            ? "critical"
+            : state.threat >= 55
+                ? "alert"
+                : "stable";
 
   return (
     <section className={`mission-scene ${config.type} ${severity}`} aria-label={`Escenario visual de ${mission.title}`}>
-      <div className="scene-head">
+    <div className="scene-head">
         <div>
-          <div className="eyebrow">SIMULACIÓN VISUAL</div>
-          <h2>{config.label}</h2>
-          <p>{config.sublabel} · el entorno responde a tus decisiones.</p>
+            <div className="eyebrow">SIMULACIÓN VISUAL</div>
+            <h2>{config.label}</h2>
+            <p>
+                {config.sublabel} · las condiciones cambian según tus decisiones operativas.
+            </p>
         </div>
-        <div className={`scene-status ${severity}`}>
-          <span className="status-dot" />
-          {stateLabel(state)}
+
+        <div className="scene-head-right">
+            <div className={`scene-status ${severity}`}>
+                <span className="status-dot" />
+                {stateLabel(legacyState)}
+            </div>
+
+            <div className="scene-phase-label">
+                FASE {scenarioPhase || "INITIAL"}
+            </div>
         </div>
-      </div>
+    </div>
 
       <div className="scene-canvas">
         <div className="scene-grid" />
-        <div className="scene-hud hud-left">
-          <span>DECISIONES</span>
-          <strong>{state.answered.length}/{mission.questions.length}</strong>
-        </div>
-        <div className="scene-hud hud-right">
-          <span>CONTROL</span>
-          <strong>{Math.max(0, 50 + state.control * 16)}%</strong>
-        </div>
 
         {config.type === "landslide" && (
           <>
@@ -148,9 +169,50 @@ export default function MissionScene({ mission, answers }) {
             <Home className="scene-house house-a" size={44} />
             <Home className="scene-house house-b" size={36} />
             <div className="scene-road" />
+            {scenarioPhase !== "INITIAL" && (
+                <div className="scene-operation-marker">
+                    <ShieldCheck size={18} />
+                    <span>OPERACIÓN ACTIVA</span>
+                </div>
+            )}
+            {["EVACUATION", "RESPONSE", "ALERT"].includes(scenarioPhase) && (
+                <div className="scene-people">
+                    <Users size={34} />
+                    <span>POBLACIÓN EN MOVILIZACIÓN</span>
+                </div>
+            )}
+            {["ROAD_CLOSED", "STABILIZATION", "MONITORING", "RESPONSE", "ALERT"].includes(
+                scenarioPhase
+            ) && (
+                    <div className="scene-road-block">
+                        <Route size={24} />
+                        <span>VÍA CERRADA</span>
+                    </div>
+                )}
+            {["STABILIZATION", "MONITORING"].includes(scenarioPhase) && (
+                <div className="scene-monitoring">
+                    <Radio size={25} />
+                    <span>SENSOR ACTIVO</span>
+                </div>
+            )}
+            {["RESPONSE", "ALERT"].includes(scenarioPhase) && (
+                <div className="scene-response-team">
+                    <Siren size={25} />
+                    <span>UNIDAD DE RESPUESTA</span>
+                </div>
+            )}
             <div className="scene-crack crack-a" />
             <div className="scene-crack crack-b" />
-            <div className="scene-alert-marker"><Siren size={18} /> {severity === "critical" ? "ZONA CRÍTICA" : "MONITOREO"}</div>
+            <div className="scene-alert-marker">
+                <Siren size={18} />
+                {scenarioPhase === "INITIAL" && "CONDICIONES INICIALES"}
+                {scenarioPhase === "EVACUATION" && "EVACUACIÓN EN CURSO"}
+                {scenarioPhase === "ROAD_CLOSED" && "VÍA COMPROMETIDA"}
+                {scenarioPhase === "STABILIZATION" && "ESTABILIZACIÓN"}
+                {scenarioPhase === "MONITORING" && "MONITOREO ACTIVO"}
+                {scenarioPhase === "RESPONSE" && "RESPUESTA OPERATIVA"}
+                {scenarioPhase === "ALERT" && "ALERTA MÁXIMA"}
+            </div>
           </>
         )}
 
@@ -213,17 +275,82 @@ export default function MissionScene({ mission, answers }) {
       </div>
 
       <div className="scene-progress"><span style={{ width: `${state.progress}%` }} /></div>
-      <div className="scene-metrics">
-        {config.metrics.map(([label, key, Icon]) => {
-          const value = Math.round(barValue(key, state));
-          return (
-            <div className="scene-metric" key={label}>
-              <div className="scene-metric-label"><span><Icon size={15} /> {label}</span><strong>{value}%</strong></div>
-              <div className="metric-track"><span style={{ width: `${value}%` }} /></div>
-            </div>
-          );
-        })}
-      </div>
+        <div className="scene-metrics">
+            {mission.id === "M-01" ? (
+                <>
+                    <div className="scene-metric">
+                        <div className="scene-metric-label">
+                            <span>
+                                <AlertTriangle size={15} /> Amenaza
+                            </span>
+                            <strong>{state.threat}%</strong>
+                        </div>
+
+                        <div className="metric-track">
+                            <span style={{ width: `${state.threat}%` }} />
+                        </div>
+                    </div>
+
+                    <div className="scene-metric">
+                        <div className="scene-metric-label">
+                            <span>
+                                <Users size={15} /> Exposición
+                            </span>
+                            <strong>{state.exposure}%</strong>
+                        </div>
+
+                        <div className="metric-track">
+                            <span style={{ width: `${state.exposure}%` }} />
+                        </div>
+                    </div>
+
+                    <div className="scene-metric">
+                        <div className="scene-metric-label">
+                            <span>
+                                <ShieldCheck size={15} /> Vulnerabilidad
+                            </span>
+                            <strong>{state.vulnerability}%</strong>
+                        </div>
+
+                        <div className="metric-track">
+                            <span style={{ width: `${state.vulnerability}%` }} />
+                        </div>
+                    </div>
+
+                    <div className="scene-metric">
+                        <div className="scene-metric-label">
+                            <span>
+                                <Activity size={15} /> Capacidad de respuesta
+                            </span>
+                            <strong>{state.response}%</strong>
+                        </div>
+
+                        <div className="metric-track">
+                            <span style={{ width: `${state.response}%` }} />
+                        </div>
+                    </div>
+                </>
+            ) : (
+                config.metrics.map(([label, key, Icon]) => {
+                    const value = Math.round(barValue(key, state));
+
+                    return (
+                        <div className="scene-metric" key={label}>
+                            <div className="scene-metric-label">
+                                <span>
+                                    <Icon size={15} /> {label}
+                                </span>
+                                <strong>{value}%</strong>
+                            </div>
+
+                            <div className="metric-track">
+                                <span style={{ width: `${value}%` }} />
+                            </div>
+                        </div>
+                    );
+                })
+            )}
+        </div>
     </section>
   );
 }
