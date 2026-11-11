@@ -4,6 +4,7 @@ const labels = {
     resourceManagement: "Gestión de recursos",
     responseCapacity: "Capacidad de respuesta",
     efficiency: "Eficiencia operacional",
+    budgetManagement: "Gestión presupuestal",
 };
 
 export default function ScorePanel({ score }) {

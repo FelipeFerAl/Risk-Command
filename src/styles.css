@@ -2772,3 +2772,608 @@
         transform-origin: left top;
     }
 }
+
+/* =========================================================
+   M-03 · Gestión presupuestal
+   ========================================================= */
+
+.m03-budget-panel {
+    display: grid;
+    grid-template-columns: 1.1fr 1.7fr .8fr;
+    gap: 16px;
+    align-items: center;
+    margin: 0 0 18px;
+    padding: 16px 18px;
+    border: 1px solid #29454e;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(9,25,32,.96), rgba(10,31,35,.9));
+    box-shadow: 0 12px 28px rgba(0,0,0,.14);
+}
+
+.m03-budget-main {
+    display: grid;
+    gap: 3px;
+}
+
+.m03-budget-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 9px;
+    letter-spacing: 1.4px;
+    color: #8da5ad;
+    font-weight: 800;
+}
+
+.m03-budget-main strong {
+    font-family: "Barlow Condensed";
+    font-size: 34px;
+    line-height: 1;
+    color: var(--accent);
+}
+
+.m03-budget-main span {
+    font-size: 9px;
+    color: #72878e;
+}
+
+.m03-budget-bar {
+    display: grid;
+    gap: 8px;
+}
+
+.m03-budget-track {
+    height: 11px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #14272d;
+    border: 1px solid #28434a;
+}
+
+    .m03-budget-track span {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg,#8a6a3f,#b99157);
+        border-radius: inherit;
+        transition: width .55s ease;
+    }
+
+.m03-budget-legend {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 9px;
+    color: #789099;
+}
+
+    .m03-budget-legend b {
+        color: #d8e4e7;
+    }
+
+.m03-reserve-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 11px;
+    background: rgba(24,55,54,.7);
+    border: 1px solid #315c56;
+}
+
+    .m03-reserve-card svg {
+        color: var(--accent);
+    }
+
+    .m03-reserve-card div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m03-reserve-card small {
+        font-size: 8px;
+        letter-spacing: 1px;
+        color: #7d9799;
+    }
+
+    .m03-reserve-card strong {
+        font-family: "Barlow Condensed";
+        font-size: 27px;
+        color: #dce9e6;
+    }
+
+
+/* =========================================================
+   MAPA
+   ========================================================= */
+
+.op-map-m03 {
+    overflow: hidden;
+}
+
+.m03-map-canvas {
+    position: relative;
+    min-height: 480px;
+    background: radial-gradient(circle at 75% 20%, rgba(43,105,118,.14), transparent 30%), radial-gradient(circle at 20% 80%, rgba(35,87,83,.12), transparent 35%), linear-gradient(180deg,#0b2028,#0c292b);
+    overflow: hidden;
+}
+
+.m03-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(rgba(125,180,170,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(125,180,170,.06) 1px, transparent 1px);
+    background-size: 36px 36px;
+}
+
+
+/* =========================================================
+   ZONA INUNDABLE
+   ========================================================= */
+
+.m03-river {
+    position: absolute;
+    z-index: 1;
+    left: 4%;
+    top: 39%;
+    width: 56%;
+    height: 86px;
+    border-radius: 50px;
+    background: linear-gradient( 90deg, rgba(27,76,88,.65), rgba(45,111,117,.78), rgba(27,76,88,.55) );
+    transform: rotate(-3deg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 18px;
+    color: #a8d5d6;
+    font-size: 9px;
+    letter-spacing: 1px;
+    transition: width .55s ease;
+    pointer-events: none;
+}
+
+    .m03-river svg {
+        flex-shrink: 0;
+    }
+
+
+/* =========================================================
+   VÍAS
+   ========================================================= */
+
+.m03-road {
+    position: absolute;
+    z-index: 4;
+    height: 16px;
+    border-radius: 20px;
+    background: #273b40;
+    color: #9aafb3;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid #385158;
+    white-space: nowrap;
+}
+
+    .m03-road.main {
+        left: 19%;
+        width: 57%;
+        top: 67%;
+        transform: rotate(-3deg);
+    }
+
+    .m03-road.alt {
+        left: 24%;
+        width: 38%;
+        top: 76%;
+        transform: rotate(3deg);
+        background: #1d3035;
+    }
+
+
+/* =========================================================
+   SECTOR RESIDENCIAL
+   ========================================================= */
+
+.m03-neighborhood {
+    position: absolute;
+    z-index: 5;
+    left: 7%;
+    top: 12%;
+    width: 38%;
+    min-height: 145px;
+    padding: 10px;
+    border: 1px solid #294c50;
+    border-radius: 12px;
+    background: rgba(11,31,35,.88);
+    box-shadow: 0 12px 28px rgba(0,0,0,.16);
+}
+
+.m03-neighborhood-title {
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: #80979a;
+    margin-bottom: 10px;
+}
+
+.m03-houses {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 9px;
+}
+
+.m03-house {
+    height: 30px;
+    border: 1px solid #4d696c;
+    border-radius: 3px;
+    background: #243c3e;
+    position: relative;
+}
+
+    .m03-house::before {
+        content: "";
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 6px;
+        height: 7px;
+        background: #15272b;
+        border-radius: 2px;
+    }
+
+    .m03-house span {
+        position: absolute;
+        bottom: 5px;
+        left: 8px;
+        width: 7px;
+        height: 8px;
+        background: #a27b4d;
+    }
+
+.m03-relocation {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 9px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: rgba(40,79,73,.75);
+    font-size: 8px;
+    color: #c5ded8;
+}
+
+
+/* =========================================================
+   INFRAESTRUCTURA CRÍTICA
+   ========================================================= */
+
+.m03-critical {
+    position: absolute;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 11px;
+    border: 1px solid #38535a;
+    border-radius: 10px;
+    background: rgba(10,26,32,.94);
+    box-shadow: 0 8px 20px rgba(0,0,0,.18);
+    transition: .4s ease;
+}
+
+    .m03-critical.school {
+        right: 8%;
+        top: 15%;
+    }
+
+    .m03-critical.health {
+        right: 8%;
+        top: 34%;
+    }
+
+    .m03-critical.protected {
+        border-color: #467b67;
+        background: rgba(20,58,49,.94);
+    }
+
+    .m03-critical svg {
+        color: #a9c9cc;
+    }
+
+    .m03-critical.protected svg {
+        color: #78c6a7;
+    }
+
+    .m03-critical div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m03-critical strong {
+        font-size: 8px;
+        letter-spacing: .7px;
+        color: #d8e3e5;
+    }
+
+    .m03-critical small {
+        font-size: 7px;
+        color: #71878d;
+    }
+
+
+/* =========================================================
+   DRENAJE
+   ========================================================= */
+
+.m03-drainage {
+    position: absolute;
+    z-index: 6;
+    left: 53%;
+    top: 49%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px dashed #526b70;
+    border-radius: 9px;
+    background: rgba(14,35,40,.9);
+    color: #a7b9bc;
+    transition: .4s ease;
+}
+
+    .m03-drainage.active {
+        border-color: #8c7651;
+        background: rgba(57,44,29,.92);
+        color: #e0c79e;
+    }
+
+    .m03-drainage div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m03-drainage strong {
+        font-size: 8px;
+    }
+
+    .m03-drainage small {
+        font-size: 7px;
+        color: #82969a;
+    }
+
+
+/* =========================================================
+   ALERTA TEMPRANA
+   ========================================================= */
+
+.m03-warning {
+    position: absolute;
+    z-index: 7;
+    left: 52%;
+    top: 8%;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border: 1px solid #476f71;
+    border-radius: 9px;
+    background: rgba(17,51,53,.94);
+    animation: m03Pulse 2.5s infinite;
+}
+
+    .m03-warning div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m03-warning strong {
+        font-size: 8px;
+    }
+
+    .m03-warning small {
+        font-size: 7px;
+        color: #91b1b2;
+    }
+
+    .m03-warning i {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #82c5b7;
+        animation: m03Signal 1.8s infinite;
+    }
+
+        .m03-warning i:nth-of-type(2) {
+            animation-delay: .3s;
+        }
+
+        .m03-warning i:nth-of-type(3) {
+            animation-delay: .6s;
+        }
+
+
+/* =========================================================
+   INDICADORES
+   ========================================================= */
+
+.m03-budget-marker {
+    position: absolute;
+    z-index: 8;
+    right: 8%;
+    top: 55%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 11px;
+    border: 1px solid #705b3f;
+    border-radius: 10px;
+    background: rgba(47,38,27,.94);
+    color: #d1b078;
+}
+
+    .m03-budget-marker div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m03-budget-marker small {
+        font-size: 7px;
+        color: #a28f73;
+        letter-spacing: .7px;
+    }
+
+    .m03-budget-marker strong {
+        font-family: "Barlow Condensed";
+        font-size: 19px;
+        color: #e0c99f;
+    }
+
+.m03-exposure {
+    position: absolute;
+    z-index: 8;
+    left: 8%;
+    bottom: 8%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 7px;
+    letter-spacing: .8px;
+    color: #789094;
+}
+
+.m03-population {
+    position: absolute;
+    z-index: 8;
+    right: 8%;
+    bottom: 8%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 9px;
+    border-radius: 8px;
+    background: rgba(12,30,35,.94);
+    border: 1px solid #304a50;
+}
+
+    .m03-population strong {
+        font-family: "Barlow Condensed";
+        font-size: 20px;
+        color: #cbdcdf;
+    }
+
+    .m03-population span {
+        font-size: 7px;
+        color: #7d9297;
+    }
+
+.m03-landmark {
+    position: absolute;
+    z-index: 6;
+    left: 48%;
+    bottom: 13%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #789094;
+    font-size: 7px;
+    letter-spacing: .8px;
+}
+
+
+/* =========================================================
+   RESPUESTA
+   ========================================================= */
+
+.m03-response {
+    position: absolute;
+    z-index: 8;
+    left: 7%;
+    bottom: 13%;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 11px;
+    border: 1px solid #41675d;
+    border-radius: 9px;
+    background: rgba(18,52,45,.94);
+    color: #b7d8d0;
+    font-size: 8px;
+    letter-spacing: .5px;
+}
+
+.m03-response-units {
+    position: absolute;
+    z-index: 8;
+    right: 29%;
+    bottom: 14%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 9px;
+    background: rgba(27,43,45,.94);
+    border: 1px solid #3b5558;
+    font-size: 14px;
+}
+
+    .m03-response-units span {
+        font-size: 7px;
+        color: #81989c;
+        letter-spacing: .8px;
+    }
+
+
+/* =========================================================
+   BRÚJULA
+   ========================================================= */
+
+.m03-compass {
+    position: absolute;
+    z-index: 10;
+    right: 18px;
+    top: 18px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #375158;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #90a9ad;
+    font-size: 8px;
+}
+
+    .m03-compass span {
+        position: absolute;
+        width: 1px;
+        height: 17px;
+        background: #7da3a5;
+        transform: rotate(45deg);
+    }
+
+
+/* =========================================================
+   ANIMACIONES
+   ========================================================= */
+
+@keyframes m03Pulse {
+    0%,100% {
+        box-shadow: 0 0 0 rgba(91,163,154,0);
+    }
+
+    50% {
+        box-shadow: 0 0 18px rgba(91,163,154,.12);
+    }
+}
+
+@keyframes m03Signal {
+    0%,100% {
+        opacity: .25;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}

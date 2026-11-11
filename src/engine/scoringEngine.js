@@ -95,6 +95,33 @@ function calculateDeterioration(initialState, decisionHistory) {
 }
 
 /*
+ * Puntaje presupuestal opcional.
+ * Se activa únicamente cuando el escenario declara scoring.budget,
+ * por lo que M01 y M02 conservan exactamente su comportamiento actual.
+ */
+function calculateBudgetScore(finalState, budgetConfig = {}) {
+    const budget = finalState?.budget;
+    const total = Number(budget?.total) || 0;
+    const remaining = Number(budget?.remaining);
+
+    if (!budget || total <= 0 || !Number.isFinite(remaining)) return null;
+
+    const remainingPct = clamp((remaining / total) * 100);
+    const min = Number(budgetConfig.idealRemainingMin ?? 20);
+    const max = Number(budgetConfig.idealRemainingMax ?? 35);
+
+    if (remainingPct >= min && remainingPct <= max) return 100;
+
+    if (remainingPct < min) {
+        const penalty = Number(budgetConfig.overspendPenalty ?? 5);
+        return Math.round(clamp(100 - (min - remainingPct) * penalty));
+    }
+
+    const penalty = Number(budgetConfig.underinvestmentPenalty ?? 3);
+    return Math.round(clamp(100 - (remainingPct - max) * penalty));
+}
+
+/*
  * Calcula el desempeño global de la misión.
  *
  * scenario.scoring permite que cada escenario tenga
@@ -239,9 +266,12 @@ export function calculateScore({
 
     let efficiencyScore = 100;
 
-    if (decisionCount > 3) {
+    const maxEfficientDecisions =
+        Number(scenario.scoring?.maxEfficientDecisions ?? 3);
+
+    if (decisionCount > maxEfficientDecisions) {
         efficiencyScore -=
-            (decisionCount - 3) * 10;
+            (decisionCount - maxEfficientDecisions) * 10;
     }
 
     /*
@@ -254,6 +284,10 @@ export function calculateScore({
         clamp(efficiencyScore)
     );
 
+    const budgetScore = scenario.scoring?.budget
+        ? calculateBudgetScore(finalState, scenario.scoring.budget)
+        : null;
+
     /*
      * -------------------------------------------------
      * 6. PUNTAJE FINAL
@@ -265,7 +299,8 @@ export function calculateScore({
         populationScore * weights.populationProtection +
         resourceScore * weights.resourceManagement +
         responseScore * weights.responseCapacity +
-        efficiencyScore * weights.efficiency
+        efficiencyScore * weights.efficiency +
+        (budgetScore ?? 0) * (weights.budgetManagement || 0)
     );
 
     return {
@@ -277,6 +312,7 @@ export function calculateScore({
             resourceManagement: resourceScore,
             responseCapacity: responseScore,
             efficiency: efficiencyScore,
+            ...(budgetScore !== null ? { budgetManagement: budgetScore } : {}),
         },
 
         details: {
@@ -287,6 +323,12 @@ export function calculateScore({
             resourcesRemaining,
             response: responseScore,
             decisionCount,
+            ...(budgetScore !== null ? {
+                budgetTotal: finalState.budget?.total || 0,
+                budgetCommitted: finalState.budget?.committed || 0,
+                budgetRemaining: finalState.budget?.remaining || 0,
+                budgetRemainingPct: Math.round(((finalState.budget?.remaining || 0) / (finalState.budget?.total || 1)) * 100),
+            } : {}),
         },
 
         trajectory: {

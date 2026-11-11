@@ -19,15 +19,51 @@ function applyNestedChanges(state, changes = {}) {
 }
 export function createInitialScenarioState(scenario) { return clone(scenario.initialState); }
 export function getAvailableDecisions(scenario, phase, state) {
-    return (scenario?.decisions?.[phase] || []).filter((decision) =>
-        typeof decision.isAvailable === "function" ? decision.isAvailable(state) : true
-    );
+    return (scenario?.decisions?.[phase] || []).filter((decision) => {
+        const hasBudget =
+            typeof decision.budgetCost !== "number" ||
+            !state?.budget ||
+            Number(state.budget.remaining ?? 0) >= decision.budgetCost;
+
+        const customAvailability =
+            typeof decision.isAvailable === "function"
+                ? decision.isAvailable(state)
+                : true;
+
+        return hasBudget && customAvailability;
+    });
 }
 export function applyDecision(state, decision) {
     if (!decision) return { state: clone(state), phase: null, decision: null, changes: {} };
     const stateBefore = clone(state);
     let nextState = applyNumericEffects(state, decision.effects);
     nextState = applyNestedChanges(nextState, decision.stateChanges);
+
+    // Presupuesto opcional: mantiene M01/M02 intactas y permite que
+    // escenarios financieros como M03 trabajen con costos explícitos.
+    if (typeof decision.budgetCost === "number" && nextState.budget) {
+        const total = Number(nextState.budget.total) || 0;
+        const previousRemaining = Number(nextState.budget.remaining ?? total) || 0;
+        const cost = Math.max(0, decision.budgetCost);
+        const remaining = Math.max(0, previousRemaining - cost);
+        const committed = Math.min(
+            total,
+            Math.max(0, (Number(nextState.budget.committed) || 0) + cost)
+        );
+
+        nextState.budget = {
+            ...nextState.budget,
+            committed,
+            remaining,
+            lastCost: cost,
+        };
+
+        // resources sigue siendo el indicador normalizado que consume
+        // scoringEngine para los escenarios actuales.
+        if (total > 0) {
+            nextState.resources = clamp((remaining / total) * 100);
+        }
+    }
     if (decision.controls) {
         const operations = {}, infrastructure = {};
         if ("monitoringActive" in decision.controls) operations.monitoring = decision.controls.monitoringActive;
