@@ -3,13 +3,8 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\CommandHUDs",
-    "\\src\\components\\OperationalMaps",
-    "\\src\\data",
-    "\\src\\data\\scenarios",
-    "\\src\\engine",
     "\\src\\lib"
   ],
-  "SelectedNode": "\\src\\data\\scenarios\\M06.js",
+  "SelectedNode": "\\src\\App.jsx",
   "PreviewInSolutionExplorer": false
 }

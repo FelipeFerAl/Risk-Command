@@ -20,6 +20,7 @@ import { evaluateScenario } from "./engine/scenarioEvaluator";
 import DecisionCenter from "./components/DecisionCenter";
 import DecisionFeedback from "./components/DecisionFeedback";
 import Debrief from "./components/Debrief";
+import MissionBriefing from "./components/ScenarioBriefing";
 
 import {
     isSupabaseConfigured,
@@ -511,6 +512,8 @@ function App() {
                         />
 
                     </section>
+
+                    <MissionBriefing mission={selectedMission} />
 
                     {isSimulation ? (
                         <>
