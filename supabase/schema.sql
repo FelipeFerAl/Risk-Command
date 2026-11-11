@@ -31,8 +31,8 @@ insert into public.missions (id, title, max_xp) values
   ('M-02', 'Misión M-02', 240),
   ('M-03', 'Misión M-03', 280),
   ('M-04', 'Misión M-04', 300),
-  ('M-05', 'Misión M-05', 260),
-  ('M-06', 'Misión M-06', 340)
+  ('M-05', 'Misión M-05', 360),
+  ('M-06', 'Misión M-06', 380)
 on conflict (id) do update set xp=excluded.xp, active=true;
 
 create table if not exists public.mission_attempts (

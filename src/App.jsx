@@ -5,9 +5,15 @@ import { scenarios, M01 } from "./data/scenarios";
 import CommandHUDM01 from "./components/CommandHUDs/CommandHUDM01";
 import CommandHUDM02 from "./components/CommandHUDs/CommandHUDM02";
 import CommandHUDM03 from "./components/CommandHUDs/CommandHUDM03";
+import CommandHUDM04 from "./components/CommandHUDs/CommandHUDM04";
+import CommandHUDM05 from "./components/CommandHUDs/CommandHUDM05";
+import CommandHUDM06 from "./components/CommandHUDs/CommandHUDM06";
 import OperationalMapM01 from "./components/OperationalMaps/OperationalMapM01";
 import OperationalMapM02 from "./components/OperationalMaps/OperationalMapM02";
 import OperationalMapM03 from "./components/OperationalMaps/OperationalMapM03";
+import OperationalMapM04 from "./components/OperationalMaps/OperationalMapM04";
+import OperationalMapM05 from "./components/OperationalMaps/OperationalMapM05";
+import OperationalMapM06 from "./components/OperationalMaps/OperationalMapM06";
 import { createInitialScenarioState, applyDecision, buildDecisionRecord, getAvailableDecisions } from "./engine/scenarioEngine";
 import { calculateScore, calculateMissionXP } from "./engine/scoringEngine";
 import { evaluateScenario } from "./engine/scenarioEvaluator";
@@ -41,15 +47,25 @@ const MISSION_COMPONENTS = {
         CommandHUD: CommandHUDM01,
         OperationalMap: OperationalMapM01,
     },
-
     "M-02": {
         CommandHUD: CommandHUDM02,
         OperationalMap: OperationalMapM02,
     },
-
     "M-03": {
         CommandHUD: CommandHUDM03,
         OperationalMap: OperationalMapM03,
+    },
+    "M-04": {
+        CommandHUD: CommandHUDM04,
+        OperationalMap: OperationalMapM04,
+    },
+    "M-05": {
+        CommandHUD: CommandHUDM05,
+        OperationalMap: OperationalMapM05,
+    },
+    "M-06": {
+        CommandHUD: CommandHUDM06,
+        OperationalMap: OperationalMapM06,
     },
 };
 
@@ -503,20 +519,28 @@ function App() {
                                 scenarioPhase={scenarioPhase}
                             />
 
-                            <OperationalMap
-                                scenarioState={scenarioState}
-                                scenarioPhase={scenarioPhase}
-                            />
+                            <div className="mission-operation-grid">
 
-                            <DecisionCenter
-                                decisions={getAvailableDecisions(
-                                    scenarios[selectedMission.id] || M01,
-                                    scenarioPhase,
-                                    scenarioState
-                                )}
-                                onDecision={handleScenarioDecision}
-                                disabled={false}
-                            />
+                                <div className="mission-map-column">
+                                    <OperationalMap
+                                        scenarioState={scenarioState}
+                                        scenarioPhase={scenarioPhase}
+                                    />
+                                </div>
+
+                                <div className="mission-decision-column">
+                                    <DecisionCenter
+                                        decisions={getAvailableDecisions(
+                                            scenarios[selectedMission.id] || M01,
+                                            scenarioPhase,
+                                            scenarioState
+                                        )}
+                                        onDecision={handleScenarioDecision}
+                                        disabled={false}
+                                    />
+                                </div>
+
+                            </div>
 
                             {lastDecision && (
                                 <DecisionFeedback decision={lastDecision} />
