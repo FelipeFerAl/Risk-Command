@@ -53,7 +53,7 @@ const metrics = [
     ["Recursos", "resources", Package],
 ];
 
-export default function CommandHUD({
+export default function CommandHUDM01({
     scenarioState = {},
     scenarioPhase = "INITIAL",
 }) {

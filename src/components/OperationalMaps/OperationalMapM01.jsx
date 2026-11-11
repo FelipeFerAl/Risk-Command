@@ -17,7 +17,7 @@ const PHASE_LABELS = {
     OUTCOME: "CIERRE DE OPERACIÓN",
 };
 
-export default function OperationalMap({
+export default function OperationalMapM01({
     scenarioState = {},
     scenarioPhase = "INITIAL",
 }) {

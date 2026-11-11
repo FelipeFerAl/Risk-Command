@@ -3,11 +3,13 @@
     "",
     "\\src",
     "\\src\\components",
+    "\\src\\components\\CommandHUDs",
+    "\\src\\components\\OperationalMaps",
     "\\src\\data",
     "\\src\\data\\scenarios",
     "\\src\\engine",
     "\\src\\lib"
   ],
-  "SelectedNode": "\\src\\components\\MissionReward.jsx",
+  "SelectedNode": "\\src\\components\\OperationalMaps\\OperationalMapM02.jsx",
   "PreviewInSolutionExplorer": false
 }

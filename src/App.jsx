@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { advancedMissionPack } from "./advancedMissions";
 import MissionReward from "./components/MissionReward";
-import OperationalMap from "./components/OperationalMap";
-import { scenarios, M01 } from "./data/scenarios";
+import { scenarios, M01, M02 } from "./data/scenarios";
+import CommandHUDM01 from "./components/CommandHUDs/CommandHUDM01";
+import CommandHUDM02 from "./components/CommandHUDs/CommandHUDM02";
+import OperationalMapM01 from "./components/OperationalMaps/OperationalMapM01";
+import OperationalMapM02 from "./components/OperationalMaps/OperationalMapM02";
 import { createInitialScenarioState, applyDecision, buildDecisionRecord, getAvailableDecisions } from "./engine/scenarioEngine";
 import { calculateScore, calculateMissionXP } from "./engine/scoringEngine";
 import { evaluateScenario } from "./engine/scenarioEvaluator";
 import DecisionCenter from "./components/DecisionCenter";
-import CommandHUD from "./components/CommandHUD";
 import DecisionFeedback from "./components/DecisionFeedback";
 import Debrief from "./components/Debrief";
 
@@ -31,6 +33,18 @@ const RANKS = [
   { min: 1000, name: "Comandante de Riesgo", icon: "🎖️" },
   { min: 1500, name: "Estratega Nacional", icon: "🧭" }
 ];
+
+const MISSION_COMPONENTS = {
+    "M-01": {
+        CommandHUD: CommandHUDM01,
+        OperationalMap: OperationalMapM01,
+    },
+
+    "M-02": {
+        CommandHUD: CommandHUDM02,
+        OperationalMap: OperationalMapM02,
+    },
+};
 
 const LOCAL_KEY = "risk-command-v1.2-local";
 const SESSION_KEY = "risk-command-v1.2-session";
@@ -307,7 +321,7 @@ function App() {
         const previousBest = bestScores[selectedMission.id] ?? -1;
 
         const xpResult = calculateMissionXP({
-            maxXP: selectedMission.max_xp ?? selectedMission.xp ?? 0,
+            maxXP: selectedMission.maxXP ?? selectedMission.max_xp ?? selectedMission.xp ?? 0,
             score,
             previousBestScore: previousBest < 0 ? 0 : previousBest,
         });
@@ -422,7 +436,12 @@ function App() {
   }
 
     if (view === "mission" && selectedMission) {
-        const isSimulation = selectedMission.id === "M-01";
+        const missionComponents = MISSION_COMPONENTS[selectedMission.id];
+
+        const isSimulation = Boolean(missionComponents);
+
+        const CommandHUD = missionComponents?.CommandHUD;
+        const OperationalMap = missionComponents?.OperationalMap;
 
         return (
             <div className="app-shell">
