@@ -10,8 +10,8 @@ import {
     ShieldCheck,
     Home,
     Ambulance,
-    MapPinned,
     Siren,
+    MapPinned,
 } from "lucide-react";
 
 const PHASE_LABELS = {
@@ -147,7 +147,6 @@ export default function OperationalMapM06({ scenarioState = {}, scenarioPhase = 
                 </div>
 
                 <div className="m06-compass"><strong>N</strong><span /></div>
-                <div className="m06-map-note"><MapPinned size={14} /> El estado de las redes cambia con cada decisión.</div>
             </div>
 
             <footer className="op-map-footer">

@@ -37,10 +37,10 @@ import "./styles.css";
 
 const RANKS = [
     { min: 0, name: "Cadete de Riesgo", icon: "🪖" },
-    { min: 250, name: "Analista de Campo", icon: "🔎" },
-    { min: 600, name: "Oficial de Prevención", icon: "🛡️" },
-    { min: 1000, name: "Comandante de Riesgo", icon: "🎖️" },
-    { min: 1500, name: "Estratega Nacional", icon: "🧭" }
+    { min: 400, name: "Analista de Campo", icon: "🔎" },
+    { min: 800, name: "Oficial de Prevención", icon: "🛡️" },
+    { min: 1400, name: "Comandante de Riesgo", icon: "🎖️" },
+    { min: 1750, name: "Estratega Nacional", icon: "🧭" }
 ];
 
 const MISSION_COMPONENTS = {

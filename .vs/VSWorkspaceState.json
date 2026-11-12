@@ -3,6 +3,7 @@
     "",
     "\\src",
     "\\src\\components",
+    "\\src\\components\\CommandHUDs",
     "\\src\\lib"
   ],
   "SelectedNode": "\\src\\App.jsx",

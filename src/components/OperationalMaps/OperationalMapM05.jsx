@@ -10,7 +10,6 @@ import {
     ShieldCheck,
     Home,
     Ambulance,
-    MapPinned,
     Siren,
 } from "lucide-react";
 
@@ -128,7 +127,6 @@ export default function OperationalMapM05({ scenarioState = {}, scenarioPhase = 
                 </div>
 
                 <div className="m05-compass"><strong>N</strong><span /></div>
-                <div className="m05-map-note"><MapPinned size={14} /> Corredores y redes se actualizan con cada decisión.</div>
             </div>
 
             <footer className="op-map-footer">

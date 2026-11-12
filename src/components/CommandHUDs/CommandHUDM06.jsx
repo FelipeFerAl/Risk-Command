@@ -58,7 +58,7 @@ export default function CommandHUDM06({ scenarioState = {}, scenarioPhase = "INI
 
     return (
         <section className="command-hud command-hud-m06">
-            <div className="command-header">
+            <div className="command-hud-header">
                 <div className="command-identity">
                     <div className="command-code">M-06</div>
                     <div>

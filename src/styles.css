@@ -3071,26 +3071,38 @@
 
 
 /* =========================================================
-   MAPA
+   M-03 · MAPA PRESUPUESTAL
+   Diseño territorial organizado por zonas
    ========================================================= */
 
 .op-map-m03 {
     overflow: hidden;
+    border-color: rgba(84, 163, 190, .20);
 }
+
+
+/* =========================================================
+   CANVAS
+   ========================================================= */
 
 .m03-map-canvas {
     position: relative;
-    min-height: 480px;
-    background: radial-gradient(circle at 75% 20%, rgba(43,105,118,.14), transparent 30%), radial-gradient(circle at 20% 80%, rgba(35,87,83,.12), transparent 35%), linear-gradient(180deg,#0b2028,#0c292b);
+    min-height: 500px;
     overflow: hidden;
+    background: radial-gradient( circle at 75% 20%, rgba(43,105,118,.16), transparent 30% ), radial-gradient( circle at 22% 72%, rgba(35,87,83,.14), transparent 35% ), #071820;
 }
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
 
 .m03-grid {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background-image: linear-gradient(rgba(125,180,170,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(125,180,170,.06) 1px, transparent 1px);
-    background-size: 36px 36px;
+    background-image: linear-gradient( rgba(125,180,170,.055) 1px, transparent 1px ), linear-gradient( 90deg, rgba(125,180,170,.055) 1px, transparent 1px );
+    background-size: 34px 34px;
 }
 
 
@@ -3098,66 +3110,64 @@
    ZONA INUNDABLE
    ========================================================= */
 
-.m03-river {
+.m03-flood-zone {
     position: absolute;
     z-index: 1;
-    left: 4%;
+    left: 5%;
     top: 39%;
-    width: 56%;
-    height: 86px;
-    border-radius: 50px;
-    background: linear-gradient( 90deg, rgba(27,76,88,.65), rgba(45,111,117,.78), rgba(27,76,88,.55) );
+    width: 46%;
+    height: 88px;
+    border-radius: 50%;
+    background: radial-gradient( ellipse, rgba(42,112,128,.30), rgba(35,91,105,.18) 65%, rgba(35,91,105,0) );
+    border: 1px solid rgba(78,153,166,.18);
     transform: rotate(-3deg);
     display: flex;
     align-items: center;
     gap: 8px;
     padding-left: 18px;
-    color: #a8d5d6;
+    box-sizing: border-box;
+    color: #78b9c0;
     font-size: 9px;
+    font-weight: 800;
     letter-spacing: 1px;
-    transition: width .55s ease;
+    transition: width .55s ease, opacity .55s ease;
     pointer-events: none;
 }
 
-    .m03-river svg {
+    .m03-flood-zone svg {
+        flex-shrink: 0;
+    }
+
+    .m03-flood-zone svg {
         flex-shrink: 0;
     }
 
 
 /* =========================================================
-   VÍAS
+   CANAL / AGUA
    ========================================================= */
 
-.m03-road {
+.m03-water-channel {
     position: absolute;
-    z-index: 4;
-    height: 16px;
-    border-radius: 20px;
-    background: #273b40;
-    color: #9aafb3;
-    font-size: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    border: 1px solid #385158;
-    white-space: nowrap;
+    z-index: 1;
+    right: 9%;
+    top: -8%;
+    width: 9%;
+    height: 118%;
+    transform: rotate(8deg);
+    background: linear-gradient( 90deg, rgba(39,103,132,.08), rgba(50,137,165,.22), rgba(39,103,132,.08) );
+    border-left: 7px solid rgba(66,139,168,.30);
+    border-right: 7px solid rgba(66,139,168,.12);
+    pointer-events: none;
 }
 
-    .m03-road.main {
-        left: 19%;
-        width: 57%;
-        top: 67%;
-        transform: rotate(-3deg);
-    }
-
-    .m03-road.alt {
-        left: 24%;
-        width: 38%;
-        top: 76%;
-        transform: rotate(3deg);
-        background: #1d3035;
-    }
+.m03-water-wave {
+    position: relative;
+    color: rgba(180,235,247,.22);
+    font-size: 20px;
+    text-align: center;
+    margin-top: 70px;
+}
 
 
 /* =========================================================
@@ -3166,69 +3176,70 @@
 
 .m03-neighborhood {
     position: absolute;
-    z-index: 5;
+    z-index: 6;
     left: 7%;
-    top: 12%;
-    width: 38%;
-    min-height: 145px;
-    padding: 10px;
-    border: 1px solid #294c50;
-    border-radius: 12px;
-    background: rgba(11,31,35,.88);
+    top: 11%;
+    width: 39%;
+    min-height: 150px;
+    padding: 12px;
+    border: 1px solid rgba(80,130,133,.48);
+    border-radius: 13px;
+    background: rgba(9,27,32,.92);
     box-shadow: 0 12px 28px rgba(0,0,0,.16);
 }
 
 .m03-neighborhood-title {
-    font-size: 8px;
-    letter-spacing: 1px;
-    color: #80979a;
-    margin-bottom: 10px;
+    margin-bottom: 11px;
+    color: rgba(255,255,255,.42);
+    font-size: .46rem;
+    font-weight: 900;
+    letter-spacing: .12em;
 }
 
 .m03-houses {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 9px;
 }
 
 .m03-house {
-    height: 30px;
-    border: 1px solid #4d696c;
-    border-radius: 3px;
-    background: #243c3e;
     position: relative;
+    height: 31px;
+    border: 1px solid #49666b;
+    border-radius: 4px;
+    background: #21393d;
 }
 
     .m03-house::before {
         content: "";
         position: absolute;
-        left: 5px;
-        right: 5px;
+        left: 7px;
+        right: 7px;
         top: 6px;
-        height: 7px;
-        background: #15272b;
+        height: 6px;
         border-radius: 2px;
+        background: #14272c;
     }
 
     .m03-house span {
         position: absolute;
+        left: 9px;
         bottom: 5px;
-        left: 8px;
         width: 7px;
         height: 8px;
-        background: #a27b4d;
+        background: #9b784d;
     }
 
-.m03-relocation {
+.m03-local-status {
     display: flex;
     align-items: center;
     gap: 6px;
     margin-top: 9px;
     padding: 6px 8px;
-    border-radius: 8px;
-    background: rgba(40,79,73,.75);
-    font-size: 8px;
-    color: #c5ded8;
+    border-radius: 7px;
+    background: rgba(40,79,73,.72);
+    color: #bdd7d1;
+    font-size: .42rem;
 }
 
 
@@ -3236,28 +3247,33 @@
    INFRAESTRUCTURA CRÍTICA
    ========================================================= */
 
-.m03-critical {
+.m03-critical-zone {
     position: absolute;
-    z-index: 6;
+    z-index: 10;
+    right: 7%;
+    top: 12%;
+    width: 26%;
+    display: grid;
+    gap: 12px;
+}
+
+.m03-critical {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
+    min-height: 51px;
     padding: 9px 11px;
     border: 1px solid #38535a;
     border-radius: 10px;
-    background: rgba(10,26,32,.94);
-    box-shadow: 0 8px 20px rgba(0,0,0,.18);
-    transition: .4s ease;
+    background: rgba(8,24,30,.94);
+    box-shadow: 0 8px 20px rgba(0,0,0,.16);
+    transition: border-color .35s ease, background .35s ease;
 }
 
-    .m03-critical.school {
-        right: 8%;
-        top: 15%;
-    }
-
-    .m03-critical.health {
-        right: 8%;
-        top: 34%;
+    .m03-critical svg:first-child {
+        color: #a9c9cc;
+        flex-shrink: 0;
     }
 
     .m03-critical.protected {
@@ -3265,13 +3281,9 @@
         background: rgba(20,58,49,.94);
     }
 
-    .m03-critical svg {
-        color: #a9c9cc;
-    }
-
-    .m03-critical.protected svg {
-        color: #78c6a7;
-    }
+        .m03-critical.protected svg {
+            color: #78c6a7;
+        }
 
     .m03-critical div {
         display: grid;
@@ -3279,14 +3291,18 @@
     }
 
     .m03-critical strong {
-        font-size: 8px;
-        letter-spacing: .7px;
+        font-size: .48rem;
+        letter-spacing: .06em;
         color: #d8e3e5;
     }
 
     .m03-critical small {
-        font-size: 7px;
+        font-size: .42rem;
         color: #71878d;
+    }
+
+    .m03-critical svg:last-child {
+        margin-left: auto;
     }
 
 
@@ -3296,23 +3312,25 @@
 
 .m03-drainage {
     position: absolute;
-    z-index: 6;
-    left: 53%;
-    top: 49%;
+    z-index: 7;
+    left: 54%;
+    top: 48%;
+    width: 20%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 8px 10px;
     border: 1px dashed #526b70;
     border-radius: 9px;
-    background: rgba(14,35,40,.9);
+    background: rgba(14,35,40,.94);
     color: #a7b9bc;
     transition: .4s ease;
 }
 
     .m03-drainage.active {
         border-color: #8c7651;
-        background: rgba(57,44,29,.92);
+        background: rgba(57,44,29,.94);
         color: #e0c79e;
     }
 
@@ -3322,32 +3340,40 @@
     }
 
     .m03-drainage strong {
-        font-size: 8px;
+        font-size: .47rem;
     }
 
     .m03-drainage small {
-        font-size: 7px;
+        font-size: .40rem;
         color: #82969a;
     }
 
 
 /* =========================================================
    ALERTA TEMPRANA
+   Zona exclusiva para operaciones dinámicas
    ========================================================= */
 
-.m03-warning {
+.m03-operation-slot {
     position: absolute;
-    z-index: 7;
-    left: 52%;
-    top: 8%;
+    z-index: 15;
+    left: 49%;
+    top: 58%;
+    width: 190px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 7px;
     padding: 8px 10px;
-    border: 1px solid #476f71;
     border-radius: 9px;
-    background: rgba(17,51,53,.94);
-    animation: m03Pulse 2.5s infinite;
+    background: rgba(12,31,35,.95);
+    border: 1px solid rgba(77,212,192,.28);
+    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+    animation: m03StateIn .35s ease-out;
+}
+
+.m03-warning {
+    color: #7dd1bf;
 }
 
     .m03-warning div {
@@ -3356,40 +3382,86 @@
     }
 
     .m03-warning strong {
-        font-size: 8px;
+        font-size: .46rem;
     }
 
     .m03-warning small {
-        font-size: 7px;
-        color: #91b1b2;
+        font-size: .40rem;
+        color: #819b9b;
     }
 
-    .m03-warning i {
-        width: 4px;
-        height: 4px;
+.m03-signal {
+    position: relative;
+    margin-left: auto;
+    width: 10px;
+    height: 10px;
+}
+
+    .m03-signal i {
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(77,212,192,.30);
         border-radius: 50%;
-        background: #82c5b7;
         animation: m03Signal 1.8s infinite;
     }
 
-        .m03-warning i:nth-of-type(2) {
+        .m03-signal i:nth-child(2) {
             animation-delay: .3s;
         }
 
-        .m03-warning i:nth-of-type(3) {
+        .m03-signal i:nth-child(3) {
             animation-delay: .6s;
         }
 
 
 /* =========================================================
-   INDICADORES
+   VÍAS
+   ========================================================= */
+
+.m03-road {
+    position: absolute;
+    z-index: 8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+    background: #273b40;
+    border: 1px solid #385158;
+    color: #92a9ad;
+    font-size: .46rem;
+    letter-spacing: .06em;
+    border-radius: 20px;
+}
+
+    .m03-road.main {
+        left: 8%;
+        width: 84%;
+        top: 72%;
+        height: 28px;
+        transform: rotate(-1.2deg);
+    }
+
+    .m03-road.alt {
+        left: 18%;
+        width: 64%;
+        top: 79%;
+        height: 19px;
+        transform: rotate(1deg);
+    }
+
+
+/* =========================================================
+   PRESUPUESTO
    ========================================================= */
 
 .m03-budget-marker {
     position: absolute;
     z-index: 8;
-    right: 8%;
-    top: 55%;
+    right: 7%;
+    top: 62%;
+    width: 25%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -3406,9 +3478,9 @@
     }
 
     .m03-budget-marker small {
-        font-size: 7px;
+        font-size: .40rem;
         color: #a28f73;
-        letter-spacing: .7px;
+        letter-spacing: .07em;
     }
 
     .m03-budget-marker strong {
@@ -3417,57 +3489,6 @@
         color: #e0c99f;
     }
 
-.m03-exposure {
-    position: absolute;
-    z-index: 8;
-    left: 8%;
-    bottom: 8%;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 7px;
-    letter-spacing: .8px;
-    color: #789094;
-}
-
-.m03-population {
-    position: absolute;
-    z-index: 8;
-    right: 8%;
-    bottom: 8%;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 9px;
-    border-radius: 8px;
-    background: rgba(12,30,35,.94);
-    border: 1px solid #304a50;
-}
-
-    .m03-population strong {
-        font-family: "Barlow Condensed";
-        font-size: 20px;
-        color: #cbdcdf;
-    }
-
-    .m03-population span {
-        font-size: 7px;
-        color: #7d9297;
-    }
-
-.m03-landmark {
-    position: absolute;
-    z-index: 6;
-    left: 48%;
-    bottom: 13%;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #789094;
-    font-size: 7px;
-    letter-spacing: .8px;
-}
-
 
 /* =========================================================
    RESPUESTA
@@ -3475,7 +3496,7 @@
 
 .m03-response {
     position: absolute;
-    z-index: 8;
+    z-index: 14;
     left: 7%;
     bottom: 13%;
     display: flex;
@@ -3484,31 +3505,133 @@
     padding: 8px 11px;
     border: 1px solid #41675d;
     border-radius: 9px;
-    background: rgba(18,52,45,.94);
+    background: rgba(18,52,45,.95);
     color: #b7d8d0;
-    font-size: 8px;
-    letter-spacing: .5px;
 }
 
-.m03-response-units {
+    .m03-response div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m03-response strong {
+        font-size: .44rem;
+    }
+
+    .m03-response small {
+        font-size: .39rem;
+        color: #819c96;
+    }
+
+
+/* =========================================================
+   RESERVA OPERATIVA
+   ========================================================= */
+
+.m03-reserve {
     position: absolute;
-    z-index: 8;
-    right: 29%;
-    bottom: 14%;
+    z-index: 14;
+    left: 30%;
+    bottom: 13%;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    border-radius: 9px;
-    background: rgba(27,43,45,.94);
-    border: 1px solid #3b5558;
-    font-size: 14px;
+    gap: 6px;
+    padding: 7px 9px;
+    border: 1px solid rgba(77,212,172,.25);
+    border-radius: 8px;
+    background: rgba(7,30,28,.93);
+    color: #77cbb4;
+    font-size: .42rem;
+    letter-spacing: .05em;
 }
 
-    .m03-response-units span {
-        font-size: 7px;
-        color: #81989c;
-        letter-spacing: .8px;
+
+/* =========================================================
+   INDICADORES INFERIORES
+   ========================================================= */
+
+.m03-exposure {
+    position: absolute;
+    z-index: 12;
+    left: 7%;
+    bottom: 5%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #789094;
+    font-size: .40rem;
+    letter-spacing: .08em;
+}
+
+.m03-landmark {
+    position: absolute;
+    z-index: 12;
+    left: 50%;
+    bottom: 5%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #789094;
+    font-size: .40rem;
+    letter-spacing: .08em;
+    white-space: nowrap;
+}
+
+.m03-population {
+    position: absolute;
+    z-index: 9;
+    right: 7%;
+    bottom: 7%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 9px;
+    border-radius: 8px;
+    background: rgba(12,30,35,.96);
+    border: 1px solid #304a50;
+}
+
+    .m03-population strong {
+        font-family: "Barlow Condensed";
+        font-size: 19px;
+        color: #cbdcdf;
+    }
+
+    .m03-population span {
+        font-size: .39rem;
+        color: #7d9297;
+    }
+
+
+/* =========================================================
+   NIVEL DE AMENAZA
+   ========================================================= */
+
+.m03-threat {
+    position: absolute;
+    z-index: 16;
+    left: 7%;
+    top: 4%;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    border: 1px solid rgba(228,187,102,.28);
+    border-radius: 8px;
+    background: rgba(39,34,24,.92);
+    color: #d7b66e;
+    font-size: .44rem;
+    font-weight: 900;
+    letter-spacing: .05em;
+}
+
+    .m03-threat span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #e4b967;
+        box-shadow: 0 0 10px rgba(228,185,103,.45);
     }
 
 
@@ -3518,26 +3641,51 @@
 
 .m03-compass {
     position: absolute;
-    z-index: 10;
-    right: 18px;
-    top: 18px;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #375158;
+    z-index: 16;
+    right: 3%;
+    top: 4%;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #29464d;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #90a9ad;
-    font-size: 8px;
+    background: rgba(7,22,28,.72);
+    color: #9eb5b9;
 }
+
+    .m03-compass strong {
+        font-size: .50rem;
+    }
 
     .m03-compass span {
         position: absolute;
         width: 1px;
-        height: 17px;
-        background: #7da3a5;
-        transform: rotate(45deg);
+        height: 15px;
+        background: rgba(120,200,190,.55);
+    }
+
+
+/* =========================================================
+   ESCALA
+   ========================================================= */
+
+.m03-scale {
+    position: absolute;
+    z-index: 16;
+    right: 3%;
+    bottom: 5%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #71868b;
+    font-size: .39rem;
+}
+
+    .m03-scale span {
+        display: block;
+        width: 45px;
+        border-top: 1px solid #71868b;
     }
 
 
@@ -3545,23 +3693,207 @@
    ANIMACIONES
    ========================================================= */
 
-@keyframes m03Pulse {
-    0%,100% {
-        box-shadow: 0 0 0 rgba(91,163,154,0);
+@keyframes m03Signal {
+
+    0% {
+        opacity: .55;
+        transform: scale(.5);
     }
 
-    50% {
-        box-shadow: 0 0 18px rgba(91,163,154,.12);
+    100% {
+        opacity: 0;
+        transform: scale(2.3);
     }
 }
 
-@keyframes m03Signal {
-    0%,100% {
-        opacity: .25;
+@keyframes m03StateIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(7px) scale(.97);
     }
 
-    50% {
+    to {
         opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+    .m03-map-canvas {
+        min-height: 440px;
+    }
+
+    .m03-neighborhood {
+        left: 5%;
+        width: 42%;
+    }
+
+    .m03-critical-zone {
+        right: 4%;
+        width: 31%;
+    }
+
+    .m03-critical {
+        min-height: 45px;
+        padding: 7px 8px;
+    }
+
+    .m03-drainage {
+        left: 47%;
+        transform: scale(.88);
+        transform-origin: left top;
+    }
+
+    .m03-operation-slot {
+        left: 47%;
+        width: 170px;
+        transform: scale(.88);
+        transform-origin: left top;
+    }
+
+    .m03-budget-marker {
+        right: 4%;
+        top: 48%;
+        transform: scale(.86);
+        transform-origin: right top;
+    }
+
+    .m03-landmark {
+        display: none;
+    }
+
+    .m03-response {
+        left: 5%;
+        bottom: 14%;
+    }
+
+    .m03-reserve {
+        left: 30%;
+        bottom: 14%;
+    }
+
+    .m03-road.main {
+        top: 72%;
+    }
+
+    .m03-road.alt {
+        top: 79%;
+    }
+}
+
+
+@media (max-width: 520px) {
+
+    .m03-map-canvas {
+        min-height: 400px;
+    }
+
+    .m03-neighborhood {
+        top: 15%;
+        width: 43%;
+        min-height: 115px;
+        padding: 9px;
+    }
+
+    .m03-houses {
+        gap: 5px;
+    }
+
+    .m03-house {
+        height: 23px;
+    }
+
+    .m03-critical-zone {
+        top: 15%;
+        width: 34%;
+    }
+
+    .m03-critical {
+        min-height: 40px;
+        padding: 6px;
+    }
+
+        .m03-critical strong {
+            font-size: .40rem;
+        }
+
+        .m03-critical small {
+            font-size: .36rem;
+        }
+
+        .m03-critical svg {
+            width: 16px;
+        }
+
+    .m03-flood-zone {
+        top: 43%;
+        min-width: 230px;
+    }
+
+    .m03-drainage {
+        left: 46%;
+        top: 47%;
+        transform: scale(.72);
+    }
+
+    .m03-operation-slot {
+        left: 46%;
+        top: 58%;
+        transform: scale(.72);
+    }
+
+    .m03-budget-marker {
+        right: 4%;
+        top: 49%;
+        transform: scale(.72);
+    }
+
+    .m03-response {
+        left: 4%;
+        bottom: 14%;
+        transform: scale(.72);
+        transform-origin: left bottom;
+    }
+
+    .m03-reserve {
+        left: 30%;
+        bottom: 14%;
+        transform: scale(.72);
+        transform-origin: left bottom;
+    }
+
+    .m03-population {
+        right: 4%;
+        bottom: 4%;
+        transform: scale(.72);
+        transform-origin: right bottom;
+    }
+
+    .m03-exposure {
+        left: 4%;
+        bottom: 5%;
+        transform: scale(.72);
+        transform-origin: left bottom;
+    }
+
+    .m03-threat {
+        left: 4%;
+        top: 4%;
+        transform: scale(.78);
+        transform-origin: left top;
+    }
+
+    .m03-compass {
+        right: 3%;
+        top: 4%;
+        transform: scale(.82);
     }
 }
 
@@ -3628,6 +3960,11 @@
         white-space: nowrap;
     }
 
+
+/* =========================================================
+   MÉTRICAS M-04
+   ========================================================= */
+
 .m04-metric.stable .command-metric-track span {
     background: #39d9c0;
 }
@@ -3639,6 +3976,11 @@
 .m04-metric.critical .command-metric-track span {
     background: #e47b72;
 }
+
+
+/* =========================================================
+   CAPACIDADES CRÍTICAS
+   ========================================================= */
 
 .m04-readiness {
     padding: 12px 20px 18px;
@@ -3689,183 +4031,134 @@
             box-shadow: 0 0 7px rgba(57,217,192,.65);
         }
 
-/* MAPA */
-
 .op-map-m04 {
     overflow: hidden;
+    border-color: rgba(84, 163, 190, .20);
 }
+
+
+/* =========================================================
+   CANVAS
+   ========================================================= */
 
 .m04-map-canvas {
     position: relative;
     min-height: 500px;
     overflow: hidden;
-    background: radial-gradient(circle at 68% 25%, rgba(92,73,43,.16), transparent 27%), radial-gradient(circle at 20% 75%, rgba(35,87,83,.12), transparent 35%), linear-gradient(180deg, #0b2028, #0c292b);
+    background: radial-gradient( circle at 72% 38%, rgba(57,105,108,.14), transparent 31% ), radial-gradient( circle at 18% 70%, rgba(37,87,82,.13), transparent 36% ), #071820;
 }
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
 
 .m04-grid {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background-image: linear-gradient(rgba(125,180,170,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(125,180,170,.055) 1px, transparent 1px);
-    background-size: 36px 36px;
+    background-image: linear-gradient( rgba(89,163,172,.055) 1px, transparent 1px ), linear-gradient( 90deg, rgba(89,163,172,.055) 1px, transparent 1px );
+    background-size: 34px 34px;
 }
 
-.m04-terrain {
+
+/* =========================================================
+   AMENAZA
+   ========================================================= */
+
+.m04-threat {
     position: absolute;
-    z-index: 1;
-    border: 1px solid rgba(112,133,105,.18);
-    background: rgba(61,82,66,.12);
-    transform: rotate(-8deg);
-}
-
-    .m04-terrain.terrain-one {
-        width: 42%;
-        height: 29%;
-        left: -8%;
-        top: 3%;
-        border-radius: 45% 55% 60% 40%;
-    }
-
-    .m04-terrain.terrain-two {
-        width: 39%;
-        height: 24%;
-        right: -7%;
-        bottom: 2%;
-        border-radius: 60% 40% 45% 55%;
-        transform: rotate(9deg);
-    }
-
-.m04-road {
-    position: absolute;
-    z-index: 4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    height: 18px;
-    border: 1px solid #385158;
-    border-radius: 20px;
-    color: #9aafb3;
-    background: #273b40;
-    font-size: 8px;
-    white-space: nowrap;
-    transition: .45s ease;
-}
-
-.m04-main-road {
-    left: 18%;
-    top: 54%;
-    width: 64%;
-    transform: rotate(-8deg);
-}
-
-    .m04-main-road.blocked {
-        border-color: #8a5b55;
-        background: #3b2829;
-        color: #d49a94;
-    }
-
-    .m04-main-road.controlled {
-        border-color: #806d4d;
-        background: #373127;
-        color: #d3bf91;
-    }
-
-.m04-bridge {
-    position: absolute;
-    z-index: 7;
-    left: 48%;
-    top: 43%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 150px;
-    padding: 9px 11px;
-    border: 1px solid #806d4d;
-    border-radius: 10px;
-    background: rgba(45,38,27,.96);
-    color: #d7c092;
-    box-shadow: 0 10px 25px rgba(0,0,0,.18);
-}
-
-    .m04-bridge.closed {
-        border-color: #8b514e;
-        background: rgba(54,31,31,.96);
-        color: #dc9690;
-    }
-
-    .m04-bridge.controlled {
-        border-color: #7b6b4e;
-        color: #d5bf8c;
-    }
-
-    .m04-bridge div,
-    .m04-alt-route div,
-    .m04-health div,
-    .m04-shelter div,
-    .m04-radio div,
-    .m04-ambulance div {
-        display: grid;
-        gap: 2px;
-    }
-
-    .m04-bridge strong,
-    .m04-alt-route strong,
-    .m04-health strong,
-    .m04-shelter strong,
-    .m04-radio strong,
-    .m04-ambulance strong {
-        font-size: 8px;
-        letter-spacing: .06em;
-    }
-
-    .m04-bridge small,
-    .m04-alt-route small,
-    .m04-health small,
-    .m04-shelter small,
-    .m04-radio small,
-    .m04-ambulance small {
-        color: rgba(255,255,255,.46);
-        font-size: 7px;
-    }
-
-.m04-alt-route {
-    position: absolute;
-    z-index: 5;
-    left: 27%;
-    top: 70%;
-    width: 43%;
-    min-height: 34px;
+    z-index: 25;
+    left: 17px;
+    top: 16px;
     display: flex;
     align-items: center;
     gap: 7px;
     padding: 7px 10px;
-    border: 1px dashed #53666a;
-    border-radius: 10px;
-    background: rgba(18,35,40,.9);
-    color: #93a9ad;
-    transform: rotate(5deg);
-    transition: .45s ease;
+    border: 1px solid rgba(228,187,102,.28);
+    border-radius: 8px;
+    background: rgba(39,34,24,.92);
+    color: #d7b66e;
+    font-size: .44rem;
+    font-weight: 900;
+    letter-spacing: .06em;
 }
 
-    .m04-alt-route.active {
-        border-style: solid;
-        border-color: #48796d;
-        background: rgba(21,56,49,.94);
-        color: #9fd1c1;
+    .m04-threat span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #e4b967;
+        box-shadow: 0 0 10px rgba(228,185,103,.45);
     }
+
+
+/* =========================================================
+   ZONA DE AFECTACIÓN
+   ========================================================= */
+
+.m04-impact-zone {
+    position: absolute;
+    z-index: 1;
+    left: 38%;
+    top: 36%;
+    width: 27%;
+    height: 92px;
+    border: 1px dashed rgba(198,139,87,.20);
+    border-radius: 50%;
+    background: radial-gradient( ellipse, rgba(153,105,61,.10), transparent 68% );
+    transform: rotate(-3deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(204,161,105,.34);
+    font-size: .40rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+}
+
+.m04-impact-pulse {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(216,169,101,.35);
+    box-shadow: 0 0 0 0 rgba(216,169,101,.28);
+    animation: m04ImpactPulse 2.2s infinite;
+}
+
+@keyframes m04ImpactPulse {
+
+    0% {
+        box-shadow: 0 0 0 0 rgba(216,169,101,.30);
+    }
+
+    70% {
+        box-shadow: 0 0 0 24px rgba(216,169,101,0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(216,169,101,0);
+    }
+}
+
+
+/* =========================================================
+   SECTORES RURALES
+   ========================================================= */
 
 .m04-community {
     position: absolute;
-    z-index: 6;
-    left: 6%;
-    top: 12%;
-    width: 34%;
-    min-height: 170px;
+    z-index: 7;
+    left: 7%;
+    top: 14%;
+    width: 37%;
+    min-height: 164px;
+    box-sizing: border-box;
     padding: 11px;
     border: 1px solid #294c50;
     border-radius: 12px;
-    background: rgba(11,31,35,.9);
+    background: rgba(11,31,35,.92);
     box-shadow: 0 12px 28px rgba(0,0,0,.16);
 }
 
@@ -3891,6 +4184,7 @@
         border: 1px solid #4b6669;
         border-radius: 3px;
         background: #243c3e;
+        transition: .35s ease;
     }
 
         .m04-houses span::before {
@@ -3927,66 +4221,252 @@
         font-size: 7px;
     }
 
-.m04-health {
-    position: absolute;
-    z-index: 7;
-    right: 7%;
-    top: 12%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 11px;
-    border: 1px solid #3d5960;
-    border-radius: 10px;
-    background: rgba(10,26,32,.95);
-    color: #a9c9cc;
-    transition: .4s ease;
-}
 
-    .m04-health.protected {
-        border-color: #477b6c;
-        background: rgba(20,58,49,.95);
-        color: #8bd0b8;
-    }
+/* =========================================================
+   INFRAESTRUCTURA CRÍTICA
+   ========================================================= */
 
-.m04-shelter {
+.m04-critical {
     position: absolute;
-    z-index: 7;
+    z-index: 13;
     right: 7%;
-    top: 30%;
+    width: 26%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 9px 11px;
     border: 1px solid #3d5960;
-    border-radius: 10px;
+    border-radius: 9px;
     background: rgba(10,26,32,.95);
     color: #a9c9cc;
-    transition: .4s ease;
+    box-shadow: 0 10px 25px rgba(0,0,0,.16);
+    transition: .35s ease;
 }
 
+.m04-health {
+    top: 15%;
+}
+
+.m04-shelter {
+    top: 31%;
+}
+
+    .m04-health.protected,
     .m04-shelter.active {
         border-color: #477b6c;
         background: rgba(20,58,49,.95);
         color: #8bd0b8;
     }
 
-.m04-radio {
+.m04-critical div {
+    display: grid;
+    gap: 2px;
+}
+
+.m04-critical strong {
+    font-size: 8px;
+    letter-spacing: .06em;
+}
+
+.m04-critical small {
+    color: rgba(255,255,255,.46);
+    font-size: 7px;
+}
+
+.m04-critical svg:last-child {
+    margin-left: auto;
+}
+
+
+/* =========================================================
+   CORREDOR PRINCIPAL
+   ========================================================= */
+
+.m04-main-road {
+    position: absolute;
+    z-index: 6;
+    left: 8%;
+    right: 8%;
+    top: 62%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #273b40;
+    border-top: 2px solid #566e72;
+    border-bottom: 2px solid #12191b;
+    border-radius: 18px;
+    color: rgba(255,255,255,.42);
+    font-size: .48rem;
+    font-weight: 900;
+    letter-spacing: .09em;
+    transform: rotate(-2deg);
+    transition: .4s ease;
+}
+
+    .m04-main-road.blocked {
+        background: #39282a;
+        border-color: #8a5b55;
+        color: #d49a94;
+        opacity: .78;
+    }
+
+    .m04-main-road.controlled {
+        background: #373127;
+        border-color: #806d4d;
+        color: #d3bf91;
+    }
+
+
+/* =========================================================
+   PUENTE
+   ========================================================= */
+
+.m04-bridge {
+    position: absolute;
+    z-index: 14;
+    left: 42%;
+    top: 54%;
+    min-width: 155px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 11px;
+    border: 1px solid #806d4d;
+    border-radius: 10px;
+    background: rgba(45,38,27,.96);
+    color: #d7c092;
+    box-shadow: 0 10px 25px rgba(0,0,0,.20);
+    transform: translateY(-50%);
+    transition: .4s ease;
+}
+
+    .m04-bridge.closed {
+        border-color: #8b514e;
+        background: rgba(54,31,31,.96);
+        color: #dc9690;
+    }
+
+    .m04-bridge.controlled {
+        border-color: #7b6b4e;
+        color: #d5bf8c;
+    }
+
+    .m04-bridge div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m04-bridge strong {
+        font-size: 8px;
+        letter-spacing: .06em;
+    }
+
+    .m04-bridge small {
+        color: rgba(255,255,255,.46);
+        font-size: 7px;
+    }
+
+    .m04-bridge svg:last-child {
+        margin-left: auto;
+    }
+
+
+/* =========================================================
+   RUTA ALTERNA
+   ========================================================= */
+
+.m04-alt-route {
     position: absolute;
     z-index: 8;
-    left: 52%;
-    top: 8%;
+    left: 20%;
+    width: 60%;
+    top: 72%;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    box-sizing: border-box;
+    border: 1px dashed #53666a;
+    border-radius: 10px;
+    background: rgba(18,35,40,.90);
+    color: #93a9ad;
+    transform: rotate(2deg);
+    transition: .4s ease;
+}
+
+    .m04-alt-route.active {
+        border-style: solid;
+        border-color: #48796d;
+        background: rgba(21,56,49,.94);
+        color: #9fd1c1;
+    }
+
+    .m04-alt-route div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m04-alt-route strong {
+        font-size: 8px;
+        letter-spacing: .06em;
+    }
+
+    .m04-alt-route small {
+        color: rgba(255,255,255,.46);
+        font-size: 7px;
+    }
+
+
+/* =========================================================
+   OPERACIONES DINÁMICAS
+   ========================================================= */
+
+.m04-radio,
+.m04-ambulance,
+.m04-response {
+    position: absolute;
+    z-index: 20;
     display: flex;
     align-items: center;
     gap: 7px;
     padding: 8px 10px;
-    border: 1px solid #46716e;
-    border-radius: 9px;
-    background: rgba(16,49,49,.95);
-    color: #a7d1c7;
+    border-radius: 8px;
+    background: rgba(7,25,30,.95);
+    box-shadow: 0 10px 25px rgba(0,0,0,.20);
+    animation: m04StateIn .35s ease-out;
 }
 
+.m04-radio {
+    right: 7%;
+    top: 47%;
+    width: 26%;
+    box-sizing: border-box;
+    border: 1px solid rgba(77,212,172,.28);
+    color: #4dd4ac;
+}
+
+    .m04-radio div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m04-radio strong {
+        font-size: 8px;
+        letter-spacing: .05em;
+    }
+
+    .m04-radio small {
+        color: rgba(255,255,255,.42);
+        font-size: 7px;
+    }
+
     .m04-radio i {
+        position: absolute;
+        right: 10px;
         width: 4px;
         height: 4px;
         border-radius: 50%;
@@ -3995,14 +4475,17 @@
     }
 
         .m04-radio i:nth-of-type(2) {
+            right: 17px;
             animation-delay: .25s;
         }
 
         .m04-radio i:nth-of-type(3) {
-            animation-delay: .5s;
+            right: 24px;
+            animation-delay: .50s;
         }
 
 @keyframes m04Signal {
+
     0%, 100% {
         opacity: .3;
         transform: scale(.8);
@@ -4015,55 +4498,80 @@
 }
 
 .m04-ambulance {
-    position: absolute;
-    z-index: 8;
-    left: 12%;
-    bottom: 10%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
+    left: 8%;
+    bottom: 12%;
     border: 1px solid #477b6c;
-    border-radius: 9px;
     background: rgba(20,58,49,.95);
     color: #9bd1bf;
 }
 
+    .m04-ambulance div {
+        display: grid;
+        gap: 2px;
+    }
+
+    .m04-ambulance strong {
+        font-size: 8px;
+    }
+
+    .m04-ambulance small {
+        color: rgba(255,255,255,.42);
+        font-size: 7px;
+    }
+
 .m04-response {
-    position: absolute;
-    z-index: 8;
-    left: 38%;
-    bottom: 8%;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 11px;
+    left: 35%;
+    bottom: 11%;
     border: 1px solid #3f665e;
-    border-radius: 9px;
     background: rgba(18,52,45,.94);
     color: #b7d8d0;
     font-size: 7px;
     letter-spacing: .07em;
 }
 
+@keyframes m04StateIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(7px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================================
+   CENTRO DE COORDINACIÓN
+   ========================================================= */
+
 .m04-admin {
     position: absolute;
-    z-index: 7;
-    left: 43%;
-    bottom: 17%;
+    z-index: 9;
+    left: 50%;
+    bottom: 6%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     gap: 5px;
     color: #788f93;
     font-size: 7px;
     letter-spacing: .08em;
+    white-space: nowrap;
 }
+
+
+/* =========================================================
+   POBLACIÓN PROTEGIDA
+   ========================================================= */
 
 .m04-population-marker {
     position: absolute;
-    z-index: 9;
+    z-index: 21;
     right: 7%;
-    bottom: 9%;
+    bottom: 7%;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -4084,9 +4592,14 @@
         font-size: 7px;
     }
 
+
+/* =========================================================
+   BRÚJULA
+   ========================================================= */
+
 .m04-compass {
     position: absolute;
-    z-index: 10;
+    z-index: 25;
     right: 18px;
     top: 18px;
     width: 30px;
@@ -4108,45 +4621,81 @@
         transform: rotate(45deg);
     }
 
-@media (max-width: 850px) {
-    .m04-overview {
-        grid-template-columns: repeat(2, 1fr);
-    }
+
+/* =========================================================
+   ESCALA
+   ========================================================= */
+
+.m04-scale {
+    position: absolute;
+    z-index: 25;
+    right: 18px;
+    bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #71868b;
+    font-size: 7px;
 }
 
-@media (max-width: 600px) {
-    .m04-overview {
-        grid-template-columns: 1fr;
-        padding: 10px 15px 0;
+    .m04-scale span {
+        display: block;
+        width: 42px;
+        border-top: 1px solid #71868b;
     }
 
-    .m04-readiness {
-        padding: 10px 15px 15px;
-    }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
 
     .m04-map-canvas {
-        min-height: 560px;
-        transform-origin: top left;
+        min-height: 500px;
     }
 
     .m04-community {
+        left: 5%;
         width: 42%;
     }
 
-    .m04-health,
-    .m04-shelter {
+    .m04-critical {
         right: 4%;
+        width: 31%;
+    }
+
+    .m04-bridge {
+        left: 39%;
+        transform: translateY(-50%) scale(.90);
+        transform-origin: left center;
+    }
+
+    .m04-radio {
+        right: 4%;
+        width: 31%;
     }
 
     .m04-alt-route {
-        left: 22%;
-        width: 48%;
+        left: 18%;
+        width: 64%;
+    }
+
+    .m04-main-road {
+        left: 4%;
+        right: 4%;
+    }
+
+    .m04-population-marker {
+        right: 4%;
     }
 }
 
 /* =========================================================
    M-05 · CRISIS EN CASCADA
+   MAPA MULTIAMENAZA
    ========================================================= */
+
 .m05-hud {
     position: relative;
     overflow: hidden;
@@ -4154,7 +4703,7 @@
 
 .m05-situation-strip {
     display: grid;
-    grid-template-columns: repeat(4,minmax(0,1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
     margin: 14px 0;
 }
@@ -4209,64 +4758,91 @@
         border-radius: 999px;
     }
 
+
+/* =========================================================
+   CANVAS
+   ========================================================= */
+
 .op-map-m05 .m05-map-canvas {
     position: relative;
     min-height: 610px;
     overflow: hidden;
+    background: radial-gradient( circle at 70% 42%, rgba(44,92,100,.10), transparent 32% ), radial-gradient( circle at 20% 65%, rgba(48,87,78,.08), transparent 35% ), #071820;
 }
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
 
 .m05-grid {
     position: absolute;
     inset: 0;
     opacity: .18;
-    background-image: linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
-    background-size: 38px 38px;
+    background-image: linear-gradient( rgba(255,255,255,.055) 1px, transparent 1px ), linear-gradient( 90deg, rgba(255,255,255,.055) 1px, transparent 1px );
+    background-size: 34px 34px;
 }
+
+
+/* =========================================================
+   LADERA
+   ========================================================= */
 
 .m05-slope-zone {
     position: absolute;
-    left: 2%;
-    top: 4%;
-    width: 37%;
-    height: 31%;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 22px;
-    background: rgba(120,100,70,.12);
+    z-index: 2;
+    left: 4%;
+    top: 8%;
+    width: 35%;
+    height: 29%;
+    box-sizing: border-box;
+    border: 1px solid rgba(125,145,143,.22);
+    border-radius: 20px;
+    background: rgba(78,92,83,.13);
     overflow: hidden;
+    transition: .45s ease;
 }
 
     .m05-slope-zone.active {
-        border-color: rgba(255,180,80,.4);
-        background: rgba(255,150,40,.08);
+        border-color: rgba(222,171,91,.38);
+        background: rgba(136,101,58,.13);
     }
 
 .m05-zone-label {
     position: absolute;
-    left: 15px;
-    top: 13px;
+    left: 14px;
+    top: 12px;
     display: flex;
-    gap: 7px;
     align-items: center;
-    font-size: 10px;
+    gap: 7px;
+    color: #b5c3c1;
+    font-size: 9px;
+    font-weight: 800;
     letter-spacing: .08em;
-    font-weight: 700;
+}
+
+.m05-slope-zone.active .m05-zone-label {
+    color: #d6b473;
 }
 
 .m05-contours {
     position: absolute;
-    inset: 42px 12px 12px;
-    opacity: .35;
+    left: 10%;
+    right: 10%;
+    top: 27%;
+    bottom: 12%;
+    opacity: .38;
 }
 
     .m05-contours i {
         position: absolute;
         border: 1px solid currentColor;
         border-radius: 50%;
-        width: 70%;
+        width: 72%;
         height: 65%;
-        transform: rotate(-10deg);
         left: 10%;
         top: 10%;
+        transform: rotate(-10deg);
     }
 
         .m05-contours i:nth-child(2) {
@@ -4293,192 +4869,219 @@
 .m05-zone-state {
     position: absolute;
     right: 14px;
-    bottom: 12px;
-    font-size: 10px;
-    letter-spacing: .1em;
+    bottom: 11px;
+    color: #d6b473;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .09em;
 }
+
+
+/* =========================================================
+   RÍO / AMENAZA HÍDRICA
+   ========================================================= */
 
 .m05-river-zone {
     position: absolute;
-    left: -4%;
-    top: 39%;
-    width: 108%;
-    height: 62px;
-    transform: rotate(-8deg);
+    z-index: 1;
+    left: -7%;
+    top: 42%;
+    width: 114%;
+    height: 74px;
+    transform: rotate(-7deg);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: rgba(70,130,180,.12);
-    border-top: 1px dashed rgba(130,190,240,.4);
-    border-bottom: 1px dashed rgba(130,190,240,.4);
-    color: #9bd3f2;
-    font-size: 10px;
-    letter-spacing: .08em;
+    background: rgba(53,112,138,.12);
+    border-top: 1px dashed rgba(110,183,212,.34);
+    border-bottom: 1px dashed rgba(110,183,212,.34);
+    color: #82bfd5;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .09em;
+    transition: .45s ease;
 }
 
     .m05-river-zone.active {
-        background: rgba(70,160,200,.18);
+        background: rgba(52,132,157,.18);
+        color: #a0d8e7;
     }
 
-.m05-road {
-    position: absolute;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0 10px;
-    border-radius: 999px;
-    background: rgba(255,255,255,.09);
-    border: 1px solid rgba(255,255,255,.12);
-    font-size: 9px;
-    letter-spacing: .06em;
-    z-index: 3;
-}
 
-    .m05-road.main {
-        left: 30%;
-        top: 48%;
-        width: 55%;
-        transform: rotate(7deg);
-    }
-
-    .m05-road.alternate {
-        left: 37%;
-        top: 63%;
-        width: 47%;
-        transform: rotate(-4deg);
-        opacity: .55;
-    }
-
-        .m05-road.alternate.active {
-            opacity: 1;
-            border-color: rgba(100,220,190,.45);
-        }
+/* =========================================================
+   SECTOR RESIDENCIAL
+   ========================================================= */
 
 .m05-residential {
     position: absolute;
+    z-index: 7;
     left: 7%;
-    bottom: 8%;
-    width: 31%;
-    height: 26%;
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 18px;
-    background: rgba(255,255,255,.025);
+    bottom: 10%;
+    width: 34%;
+    height: 25%;
+    box-sizing: border-box;
     padding: 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 16px;
+    background: rgba(10,29,34,.92);
+    box-shadow: 0 12px 30px rgba(0,0,0,.16);
 }
 
 .m05-residential-title {
-    font-size: 9px;
-    letter-spacing: .1em;
-    color: var(--muted,#94a3b8);
+    color: #879b9e;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .10em;
 }
 
 .m05-houses {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     margin-top: 12px;
 }
 
 .m05-house {
-    height: 25px;
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 5px;
     position: relative;
+    height: 24px;
+    border: 1px solid rgba(130,157,158,.30);
+    border-radius: 4px;
+    background: rgba(255,255,255,.015);
 }
 
     .m05-house::before {
         content: "";
         position: absolute;
-        width: 13px;
-        height: 13px;
+        width: 12px;
+        height: 12px;
+        left: 50%;
+        top: -7px;
         border-left: 1px solid currentColor;
         border-top: 1px solid currentColor;
-        transform: rotate(45deg);
-        left: 9px;
-        top: -7px;
-        opacity: .4;
+        transform: translateX(-50%) rotate(45deg);
+        opacity: .35;
     }
 
 .m05-exposure-tag {
-    margin-top: 10px;
     display: flex;
-    gap: 6px;
     align-items: center;
-    font-size: 10px;
+    gap: 6px;
+    margin-top: 9px;
+    color: #9caeb1;
+    font-size: 9px;
 }
+
+
+/* =========================================================
+   COLUMNA DE REDES CRÍTICAS
+   ========================================================= */
 
 .m05-critical {
     position: absolute;
+    z-index: 12;
+    right: 7%;
+    width: 27%;
+    min-width: 0;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 9px;
-    min-width: 150px;
-    padding: 10px 12px;
-    border: 1px solid rgba(255,255,255,.12);
-    background: rgba(10,15,25,.88);
-    border-radius: 12px;
-    z-index: 5;
+    padding: 9px 11px;
+    border: 1px solid rgba(75,99,105,.75);
+    border-radius: 10px;
+    background: rgba(8,24,30,.96);
+    box-shadow: 0 10px 25px rgba(0,0,0,.18);
+    transition: .4s ease;
 }
 
-    .m05-critical strong, .m05-critical small, .m05-comms strong, .m05-comms small, .m05-shelter strong, .m05-shelter small {
+    .m05-critical strong {
         display: block;
+        color: #c3d6d8;
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: .06em;
     }
 
-    .m05-critical strong, .m05-comms strong, .m05-shelter strong {
-        font-size: 10px;
-        letter-spacing: .05em;
-    }
-
-    .m05-critical small, .m05-comms small, .m05-shelter small {
+    .m05-critical small {
+        display: block;
         margin-top: 2px;
-        font-size: 9px;
-        color: var(--muted,#94a3b8);
+        color: rgba(255,255,255,.44);
+        font-size: 7px;
     }
 
     .m05-critical.active {
-        border-color: rgba(80,220,170,.45);
+        border-color: rgba(73,207,169,.46);
+        background: rgba(18,53,46,.96);
     }
 
+        .m05-critical.active strong {
+            color: #a9d6c8;
+        }
+
+
+    /* =========================================================
+   POSICIONES DE INFRAESTRUCTURA
+   ========================================================= */
+
     .m05-critical.substation {
-        left: 58%;
-        top: 14%;
+        top: 20%;
     }
 
     .m05-critical.water {
-        left: 72%;
-        top: 30%;
+        top: 37%;
     }
 
     .m05-critical.hospital {
-        left: 66%;
-        bottom: 14%;
+        top: 54%;
     }
+
+
+/* =========================================================
+   RED DE RADIO
+   ========================================================= */
 
 .m05-comms {
     position: absolute;
-    left: 43%;
+    z-index: 13;
+    right: 7%;
     top: 8%;
+    width: 27%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 9px 12px;
-    border: 1px dashed rgba(255,255,255,.18);
-    border-radius: 12px;
-    background: rgba(10,15,25,.8);
-    z-index: 5;
+    padding: 9px 11px;
+    border: 1px dashed rgba(115,145,151,.48);
+    border-radius: 10px;
+    background: rgba(8,24,30,.94);
+    color: #9eb6ba;
 }
 
     .m05-comms.active {
-        border-color: rgba(100,220,190,.5);
+        border-style: solid;
+        border-color: rgba(75,211,177,.48);
+        color: #8fd0bd;
+    }
+
+    .m05-comms strong {
+        display: block;
+        font-size: 8px;
+        letter-spacing: .06em;
+    }
+
+    .m05-comms small {
+        display: block;
+        margin-top: 2px;
+        color: rgba(255,255,255,.42);
+        font-size: 7px;
     }
 
 .m05-signal {
     display: flex;
     align-items: flex-end;
     gap: 2px;
-    margin-left: 5px;
+    margin-left: auto;
 }
 
     .m05-signal i {
@@ -4489,91 +5092,207 @@
     }
 
         .m05-signal i:nth-child(1) {
-            height: 5px
+            height: 5px;
         }
 
         .m05-signal i:nth-child(2) {
-            height: 9px
+            height: 9px;
         }
 
         .m05-signal i:nth-child(3) {
-            height: 13px
+            height: 13px;
         }
+
+
+/* =========================================================
+   REFUGIO
+   ========================================================= */
 
 .m05-shelter {
     position: absolute;
-    left: 42%;
+    z-index: 13;
+    left: 48%;
     bottom: 12%;
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 9px 12px;
-    border: 1px solid rgba(255,255,255,.12);
-    background: rgba(10,15,25,.88);
-    border-radius: 12px;
-    z-index: 5;
+    border: 1px solid rgba(75,99,105,.75);
+    border-radius: 10px;
+    background: rgba(8,24,30,.96);
+    color: #a8bec1;
+    transition: .4s ease;
 }
 
     .m05-shelter.active {
-        border-color: rgba(100,220,190,.45);
+        border-color: rgba(73,207,169,.46);
+        background: rgba(18,53,46,.96);
+        color: #9fd0bf;
     }
 
-.m05-control-zone, .m05-route-status, .m05-evacuation-flow, .m05-population, .m05-map-note {
+    .m05-shelter strong {
+        display: block;
+        font-size: 8px;
+        letter-spacing: .06em;
+    }
+
+    .m05-shelter small {
+        display: block;
+        margin-top: 2px;
+        color: rgba(255,255,255,.44);
+        font-size: 7px;
+    }
+
+
+/* =========================================================
+   CORREDORES
+   ========================================================= */
+
+.m05-road {
     position: absolute;
-    z-index: 6;
+    z-index: 8;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-sizing: border-box;
+    padding: 0 11px;
+    border-radius: 999px;
+    background: #263b40;
+    border: 1px solid #526a6e;
+    color: rgba(232,241,241,.58);
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: .07em;
+    box-shadow: 0 5px 15px rgba(0,0,0,.14);
+}
+
+    .m05-road.main {
+        left: 9%;
+        width: 82%;
+        top: 68%;
+        transform: rotate(-2deg);
+    }
+
+    .m05-road.alternate {
+        left: 22%;
+        width: 58%;
+        top: 78%;
+        height: 19px;
+        background: rgba(20,37,42,.96);
+        border: 1px dashed #53696d;
+        color: #82979a;
+        transform: rotate(1deg);
+        opacity: .82;
+    }
+
+        .m05-road.alternate.active {
+            opacity: 1;
+            border-style: solid;
+            border-color: rgba(83,202,171,.48);
+            color: #9ed2c3;
+            background: rgba(20,53,47,.96);
+        }
+
+
+/* =========================================================
+   ESTADOS DINÁMICOS
+   ========================================================= */
+
+.m05-control-zone,
+.m05-route-status,
+.m05-evacuation-flow,
+.m05-population,
+.m05-map-note {
+    position: absolute;
+    z-index: 20;
     display: flex;
     align-items: center;
     gap: 7px;
-    border-radius: 999px;
-    font-size: 9px;
+    border-radius: 9px;
+    font-size: 8px;
     letter-spacing: .04em;
 }
 
+
+/* Control de amenaza */
+
 .m05-control-zone {
-    left: 5%;
-    top: 37%;
+    left: 8%;
+    top: 39%;
     padding: 7px 10px;
-    background: rgba(255,170,60,.12);
-    border: 1px solid rgba(255,170,60,.28);
+    background: rgba(61,48,30,.94);
+    border: 1px solid rgba(218,168,86,.32);
+    color: #d1b174;
 }
+
+
+/* Ruta disponible */
 
 .m05-route-status {
-    right: 5%;
-    top: 52%;
+    right: 7%;
+    top: 71%;
     padding: 7px 10px;
-    background: rgba(80,210,170,.1);
-    border: 1px solid rgba(80,210,170,.28);
+    background: rgba(18,52,45,.94);
+    border: 1px solid rgba(80,210,170,.30);
+    color: #9bcdbd;
 }
 
+
+/* Evacuación */
+
 .m05-evacuation-flow {
-    left: 40%;
+    left: 43%;
     bottom: 4%;
-    padding: 8px 12px;
-    background: rgba(80,210,170,.12);
-    border: 1px solid rgba(80,210,170,.3);
+    padding: 8px 11px;
+    background: rgba(18,52,45,.95);
+    border: 1px solid rgba(80,210,170,.34);
+    color: #9ed0c1;
 }
 
     .m05-evacuation-flow span {
-        color: var(--muted,#94a3b8);
+        color: rgba(255,255,255,.46);
     }
 
+
+/* Población protegida */
+
 .m05-population {
-    right: 4%;
+    right: 7%;
     bottom: 5%;
-    padding: 9px 12px;
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.1);
+    padding: 8px 11px;
+    background: rgba(10,29,34,.96);
+    border: 1px solid #304b50;
 }
 
     .m05-population strong {
-        font-size: 14px;
+        color: #d4e0e1;
+        font-family: "Barlow Condensed";
+        font-size: 19px;
     }
+
+    .m05-population span {
+        color: #82969a;
+        font-size: 7px;
+    }
+
+
+/* =========================================================
+   NOTA DEL MAPA
+   ========================================================= */
 
 .m05-map-note {
     left: 4%;
     bottom: 3%;
-    color: var(--muted,#94a3b8);
+    color: #71878b;
+    font-size: 7px;
 }
+
+
+/* =========================================================
+   BRÚJULA
+   ========================================================= */
 
 .m05-compass {
     position: absolute;
@@ -4581,11 +5300,12 @@
     top: 5%;
     width: 34px;
     height: 34px;
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: 50%;
     display: grid;
     place-items: center;
-    z-index: 7;
+    z-index: 25;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 50%;
+    color: #90a5a8;
     font-size: 10px;
 }
 
@@ -4593,11 +5313,17 @@
         position: absolute;
         width: 1px;
         height: 12px;
-        background: currentColor;
         top: 3px;
+        background: currentColor;
     }
 
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
 @media (max-width: 900px) {
+
     .m05-situation-strip {
         grid-template-columns: repeat(2,minmax(0,1fr));
     }
@@ -4610,23 +5336,31 @@
         min-height: 520px;
     }
 
+    .m05-critical {
+        right: 5%;
+        width: 31%;
+    }
+
+    .m05-comms {
+        right: 5%;
+        width: 31%;
+    }
+
     .m05-critical.substation {
-        left: 52%;
-        top: 17%;
+        top: 20%;
     }
 
     .m05-critical.water {
-        left: 57%;
-        top: 34%;
+        top: 37%;
     }
 
     .m05-critical.hospital {
-        left: 53%;
-        bottom: 16%;
+        top: 54%;
     }
 }
 
 @media (max-width: 620px) {
+
     .m05-situation-strip {
         grid-template-columns: 1fr;
     }
@@ -4636,533 +5370,839 @@
     }
 
     .m05-critical {
-        min-width: 0;
+        right: 4%;
+        width: 36%;
+        padding: 8px;
         transform: scale(.92);
-        transform-origin: left top;
+        transform-origin: right center;
     }
 
-        .m05-critical.substation {
-            left: 46%;
-            top: 16%;
-        }
+    .m05-comms {
+        right: 4%;
+        width: 36%;
+    }
 
-        .m05-critical.water {
-            left: 47%;
-            top: 34%;
-        }
+    .m05-critical.substation {
+        top: 19%;
+    }
 
-        .m05-critical.hospital {
-            left: 44%;
-            bottom: 20%;
-        }
+    .m05-critical.water {
+        top: 36%;
+    }
+
+    .m05-critical.hospital {
+        top: 53%;
+    }
+
+    .m05-residential {
+        left: 5%;
+        width: 40%;
+    }
 
     .m05-road.main {
-        left: 22%;
-        width: 68%;
+        left: 5%;
+        width: 90%;
     }
 
     .m05-road.alternate {
-        left: 25%;
-        width: 65%;
+        left: 16%;
+        width: 68%;
+    }
+
+    .m05-shelter {
+        left: 45%;
     }
 }
 
 /* =========================================================
-   M06 · PUNTO DE QUIEBRE
-   Estilos específicos. Se apoyan en las clases generales
-   de op-map, command-hud y mission-operation-grid.
+   M-06 · RECONSTRUCCIÓN VISUAL FINAL
    ========================================================= */
 
-.command-hud-m06 .command-code {
-    background: rgba(255, 184, 77, .12);
-    border-color: rgba(255, 184, 77, .24);
-}
 
-.m06-situation-strip,
-.m06-network-strip {
-    display: grid;
-    gap: 10px;
-    margin-top: 14px;
-}
+/* =========================================================
+   CENTRO DE COMANDO
+   ========================================================= */
 
-.m06-situation-strip {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.m06-situation-item {
-    min-width: 0;
-    padding: 10px 12px;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 12px;
-    background: rgba(255,255,255,.025);
-}
-
-    .m06-situation-item span,
-    .m06-situation-item strong {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-    }
-
-    .m06-situation-item span {
-        color: rgba(255,255,255,.55);
-        font-size: 10px;
-        letter-spacing: .08em;
-    }
-
-    .m06-situation-item strong {
-        margin-top: 5px;
-        font-size: 13px;
-    }
-
-.m06-network-strip {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-    .m06-network-strip > div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        min-height: 30px;
-        border: 1px solid rgba(255,255,255,.07);
-        border-radius: 9px;
-        color: rgba(255,255,255,.42);
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: .04em;
-    }
-
-        .m06-network-strip > div.is-active {
-            color: rgba(255,255,255,.88);
-            border-color: rgba(57,217,192,.25);
-            background: rgba(57,217,192,.06);
-        }
-
-        .m06-network-strip > div.reserve.is-active {
-            border-color: rgba(255,184,77,.28);
-            background: rgba(255,184,77,.06);
-        }
-
-.m06-population-line {
-    display: grid;
-    grid-template-columns: auto auto minmax(100px, 1fr) auto;
-    align-items: center;
-    gap: 10px;
-    margin-top: 14px;
-    color: rgba(255,255,255,.55);
-    font-size: 11px;
-}
-
-    .m06-population-line strong {
-        color: rgba(255,255,255,.9);
-    }
-
-.m06-population-track {
-    height: 6px;
+.command-hud-m06 {
     overflow: hidden;
-    border-radius: 999px;
-    background: rgba(255,255,255,.07);
 }
 
-    .m06-population-track span {
-        display: block;
-        height: 100%;
-        border-radius: inherit;
-        background: currentColor;
+
+    /* Encabezado */
+
+    .command-hud-m06 .command-hud-header {
+        min-height: 82px;
+        box-sizing: border-box;
     }
 
-/* MAPA */
+
+    /* Situación */
+
+    .command-hud-m06 .m06-situation-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin: 0;
+        padding: 14px 16px 0;
+    }
+
+    .command-hud-m06 .m06-situation-item {
+        min-height: 58px;
+        box-sizing: border-box;
+        padding: 10px 12px;
+        border: 1px solid rgba(255,255,255,.09);
+        border-radius: 11px;
+        background: rgba(255,255,255,.025);
+    }
+
+        .command-hud-m06 .m06-situation-item span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,.50);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .07em;
+        }
+
+        .command-hud-m06 .m06-situation-item strong {
+            display: block;
+            margin-top: 6px;
+            color: rgba(255,255,255,.90);
+            font-size: 12px;
+        }
+
+
+    /* Redes */
+
+    .command-hud-m06 .m06-network-strip {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+        margin: 10px 16px 0;
+    }
+
+        .command-hud-m06 .m06-network-strip > div {
+            min-height: 31px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 8px;
+            background: rgba(255,255,255,.018);
+            color: rgba(255,255,255,.40);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .04em;
+        }
+
+            .command-hud-m06 .m06-network-strip > div.is-active {
+                color: #8ed1c0;
+                border-color: rgba(57,217,192,.25);
+                background: rgba(57,217,192,.055);
+            }
+
+
+    /* Métricas */
+
+    .command-hud-m06 .command-metrics {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-top: 12px;
+    }
+
+    .command-hud-m06 .command-metric {
+        min-width: 0;
+    }
+
+
+    /* Población */
+
+    .command-hud-m06 .m06-population-line {
+        display: grid;
+        grid-template-columns: auto auto minmax(100px, 1fr) auto;
+        align-items: center;
+        gap: 10px;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 11px 16px 13px;
+        color: rgba(255,255,255,.48);
+        font-size: 10px;
+    }
+
+        .command-hud-m06 .m06-population-line strong {
+            color: rgba(255,255,255,.88);
+        }
+
+    .command-hud-m06 .m06-population-track {
+        height: 5px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255,255,255,.07);
+    }
+
+        .command-hud-m06 .m06-population-track span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: #39d9c0;
+        }
+
+
+/* =========================================================
+   MAPA
+   ========================================================= */
+
 .op-map-m06 .m06-map-canvas {
     position: relative;
     min-height: 560px;
     overflow: hidden;
-    background: linear-gradient(145deg, rgba(12,24,31,.98), rgba(17,22,30,.98));
+    background: radial-gradient( circle at 48% 42%, rgba(36,83,91,.10), transparent 38% ), #071820;
 }
 
-.m06-grid {
+
+/* Grid */
+
+.op-map-m06 .m06-grid {
     position: absolute;
     inset: 0;
-    opacity: .3;
-    background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    opacity: .30;
+    background-image: linear-gradient( rgba(255,255,255,.04) 1px, transparent 1px ), linear-gradient( 90deg, rgba(255,255,255,.04) 1px, transparent 1px );
     background-size: 32px 32px;
 }
 
-.m06-slope {
+
+/* =========================================================
+   LADERA · ZONA SUPERIOR IZQUIERDA
+   ========================================================= */
+
+.op-map-m06 .m06-slope {
     position: absolute;
-    left: 3%;
-    top: 5%;
-    width: 31%;
-    height: 29%;
-    padding: 14px;
-    border: 1px solid rgba(255,105,105,.28);
-    border-radius: 22px 36px 24px 30px;
-    background: rgba(160,55,55,.10);
-    transform: rotate(-4deg);
-}
-
-    .m06-slope.active {
-        border-color: rgba(57,217,192,.3);
-        background: rgba(57,217,192,.06);
-    }
-
-.m06-zone-label {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .06em;
-}
-
-.m06-slope > span {
-    position: absolute;
-    right: 13px;
-    bottom: 12px;
-    font-size: 9px;
-    letter-spacing: .08em;
-    opacity: .7;
-}
-
-.m06-contours {
-    position: absolute;
-    inset: 36px 18px 25px;
-}
-
-    .m06-contours i {
-        display: block;
-        height: 26px;
-        margin: 5px 0;
-        border: 1px solid rgba(255,255,255,.11);
-        border-left: 0;
-        border-right: 0;
-        border-radius: 50%;
-    }
-
-.m06-river {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    writing-mode: vertical-rl;
-    background: rgba(65,130,190,.13);
-    border-left: 1px solid rgba(65,130,190,.25);
-    color: rgba(180,215,240,.8);
-    font-size: 10px;
-    letter-spacing: .06em;
-}
-
-.m06-road {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 7px 12px;
-    border-radius: 999px;
-    border: 1px dashed rgba(255,255,255,.22);
-    background: rgba(255,255,255,.04);
-    font-size: 9px;
-    letter-spacing: .05em;
-}
-
-    .m06-road.main {
-        left: 31%;
-        top: 45%;
-        width: 48%;
-        justify-content: center;
-        transform: rotate(4deg);
-    }
-
-    .m06-road.alternate {
-        left: 26%;
-        top: 63%;
-        width: 51%;
-        justify-content: center;
-        opacity: .45;
-        transform: rotate(-6deg);
-    }
-
-    .m06-road.active {
-        opacity: 1;
-        border-style: solid;
-        border-color: rgba(57,217,192,.35);
-        background: rgba(57,217,192,.07);
-    }
-
-.m06-sector {
-    position: absolute;
-    width: 20%;
-    padding: 9px;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 14px;
-    background: rgba(255,255,255,.035);
-}
-
-.sector-a {
     left: 4%;
-    top: 42%;
+    top: 6%;
+    width: 28%;
+    height: 25%;
+    box-sizing: border-box;
+    padding: 13px;
+    z-index: 8;
+    border: 1px solid rgba(225,109,105,.30);
+    border-radius: 22px 34px 25px 30px;
+    background: rgba(160,55,55,.09);
+    transform: rotate(-3deg);
 }
 
-.sector-b {
-    left: 8%;
-    top: 67%;
-}
 
-.sector-c {
-    left: 38%;
-    top: 78%;
-}
+/* =========================================================
+   BRÚJULA
+   ========================================================= */
 
-.m06-sector-title {
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: .08em;
-}
-
-.m06-sector > span {
-    display: block;
-    margin-top: 5px;
-    color: rgba(255,255,255,.45);
-    font-size: 9px;
-}
-
-.m06-houses {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: 7px;
-}
-
-.m06-house {
-    width: 12px;
-    height: 9px;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 2px;
-}
-
-.m06-critical,
-.m06-comms,
-.m06-shelter {
+.op-map-m06 .m06-compass {
     position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 10px 12px;
-    border: 1px solid rgba(255,255,255,.10);
-    border-radius: 13px;
-    background: rgba(18,24,30,.9);
-    box-shadow: 0 10px 28px rgba(0,0,0,.16);
-}
-
-    .m06-critical strong,
-    .m06-comms strong,
-    .m06-shelter strong {
-        display: block;
-        font-size: 9px;
-        letter-spacing: .05em;
-    }
-
-    .m06-critical small,
-    .m06-comms small,
-    .m06-shelter small {
-        display: block;
-        margin-top: 2px;
-        color: rgba(255,255,255,.45);
-        font-size: 9px;
-    }
-
-    .m06-critical.active,
-    .m06-comms.active,
-    .m06-shelter.active {
-        border-color: rgba(57,217,192,.28);
-        background: rgba(57,217,192,.055);
-    }
-
-    .m06-critical.power {
-        left: 53%;
-        top: 17%;
-    }
-
-    .m06-critical.water {
-        left: 58%;
-        top: 72%;
-    }
-
-    .m06-critical.hospital {
-        left: 72%;
-        top: 52%;
-    }
-
-.m06-comms {
-    left: 43%;
-    top: 34%;
-}
-
-.m06-shelter {
-    left: 68%;
-    top: 77%;
-}
-
-.m06-signal {
-    display: flex;
-    gap: 2px;
-    align-items: end;
-    margin-left: 4px;
-}
-
-    .m06-signal i {
-        display: block;
-        width: 3px;
-        border-radius: 2px;
-        background: currentColor;
-    }
-
-        .m06-signal i:nth-child(1) {
-            height: 5px;
-        }
-
-        .m06-signal i:nth-child(2) {
-            height: 9px;
-        }
-
-        .m06-signal i:nth-child(3) {
-            height: 13px;
-        }
-
-.m06-assessment,
-.m06-route-status,
-.m06-contingency {
-    position: absolute;
-    left: 34%;
-    padding: 6px 9px;
-    border-radius: 999px;
-    background: rgba(57,217,192,.08);
-    border: 1px solid rgba(57,217,192,.2);
-    font-size: 9px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.m06-assessment {
-    top: 36%;
-}
-
-.m06-route-status {
-    top: 69%;
-}
-
-.m06-contingency {
-    right: 15%;
-    top: 8%;
-    left: auto;
-}
-
-.m06-evacuation-flow {
-    position: absolute;
-    left: 31%;
-    bottom: 5%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 12px;
-    border-radius: 12px;
-    background: rgba(57,217,192,.08);
-    border: 1px solid rgba(57,217,192,.22);
-    font-size: 10px;
-}
-
-    .m06-evacuation-flow span {
-        color: rgba(255,255,255,.48);
-    }
-
-.m06-population {
-    position: absolute;
-    left: 76%;
-    bottom: 8%;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 10px;
-    border-radius: 10px;
-    background: rgba(255,255,255,.035);
+    right: 4%;
+    top: 5%;
+    z-index: 30;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 50%;
+    background: rgba(7,19,25,.82);
     color: rgba(255,255,255,.55);
     font-size: 9px;
 }
 
-    .m06-population.active {
-        color: rgba(255,255,255,.9);
-        border: 1px solid rgba(57,217,192,.18);
+
+/* =========================================================
+   RÍO · FRANJA CENTRAL
+   ========================================================= */
+
+.op-map-m06 .m06-river {
+    position: absolute;
+    left: -4%;
+    top: 35%;
+    width: 108%;
+    height: 64px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    writing-mode: horizontal-tb;
+    transform: rotate(-2deg);
+    background: rgba(55,123,148,.13);
+    border-top: 1px dashed rgba(100,181,210,.32);
+    border-bottom: 1px dashed rgba(100,181,210,.32);
+    border-left: 0;
+    color: rgba(155,207,225,.72);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+
+/* =========================================================
+   INFRAESTRUCTURA · COLUMNA DERECHA
+   ========================================================= */
+
+.op-map-m06 .m06-critical,
+.op-map-m06 .m06-comms,
+.op-map-m06 .m06-shelter {
+    position: absolute;
+    right: 7%;
+    left: auto;
+    width: 28%;
+    min-height: 50px;
+    box-sizing: border-box;
+    z-index: 18;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 11px;
+    border: 1px solid rgba(70,101,108,.75);
+    border-radius: 11px;
+    background: rgba(7,23,29,.96);
+    box-shadow: 0 8px 20px rgba(0,0,0,.16);
+}
+
+
+    /* Posiciones separadas */
+
+    .op-map-m06 .m06-critical.power {
+        top: 8%;
     }
 
-.m06-chain-note {
+.op-map-m06 .m06-comms {
+    top: 24%;
+}
+
+.op-map-m06 .m06-critical.water {
+    top: 43%;
+}
+
+.op-map-m06 .m06-critical.hospital {
+    top: 62%;
+}
+
+.op-map-m06 .m06-shelter {
+    top: 79%;
+}
+
+
+/* =========================================================
+   SECTORES · COLUMNA IZQUIERDA
+   ========================================================= */
+
+.op-map-m06 .m06-sector {
     position: absolute;
-    right: 14%;
-    top: 28%;
-    display: grid;
-    gap: 3px;
+    left: 5%;
+    width: 27%;
+    box-sizing: border-box;
+    z-index: 15;
+    padding: 10px 11px;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 13px;
+    background: rgba(10,28,34,.94);
+}
+
+
+/* Los sectores quedan fuera de la franja del río */
+
+.op-map-m06 .sector-a {
+    top: 48%;
+}
+
+.op-map-m06 .sector-b {
+    top: 64%;
+}
+
+.op-map-m06 .sector-c {
+    top: 80%;
+}
+
+
+/* =========================================================
+   CORREDOR PRINCIPAL
+   ========================================================= */
+
+.op-map-m06 .m06-road.main {
+    position: absolute;
+    left: 35%;
+    top: 56%;
+    width: 29%;
+    z-index: 12;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 8px 10px;
-    border-left: 2px solid rgba(255,184,77,.5);
+    border: 1px solid #526a6e;
+    border-radius: 999px;
+    background: #263b40;
+    color: rgba(232,241,241,.64);
+    font-size: 8px;
+    font-weight: 800;
+    transform: rotate(1deg);
+}
+
+
+/* =========================================================
+   RUTA DE CONTINGENCIA
+   ========================================================= */
+
+.op-map-m06 .m06-road.alternate {
+    position: absolute;
+    left: 35%;
+    top: 72%;
+    width: 27%;
+    z-index: 12;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 10px;
+    border: 1px dashed rgba(255,255,255,.20);
+    border-radius: 999px;
+    background: rgba(12,29,34,.92);
+    color: rgba(255,255,255,.35);
+    font-size: 8px;
+    transform: rotate(-2deg);
+}
+
+    .op-map-m06 .m06-road.alternate.active {
+        opacity: 1;
+        border-style: solid;
+        border-color: rgba(57,217,192,.35);
+        background: rgba(57,217,192,.07);
+        color: #9fd3c3;
+    }
+
+
+/* =========================================================
+   CADENA CRÍTICA
+   ========================================================= */
+
+.op-map-m06 .m06-chain-note {
+    position: absolute;
+    left: 35%;
+    right: auto;
+    top: 88%;
+    width: 31%;
+    box-sizing: border-box;
+    z-index: 20;
+    padding: 7px 9px;
+    border-left: 2px solid rgba(255,184,77,.50);
     background: rgba(255,184,77,.035);
 }
 
-    .m06-chain-note strong {
+    .op-map-m06 .m06-chain-note strong {
+        display: block;
+        color: #d4b46d;
         font-size: 8px;
-        letter-spacing: .08em;
+        font-weight: 900;
+        letter-spacing: .07em;
     }
 
-    .m06-chain-note span {
-        color: rgba(255,255,255,.48);
-        font-size: 9px;
+    .op-map-m06 .m06-chain-note span {
+        display: block;
+        margin-top: 2px;
+        color: rgba(255,255,255,.44);
+        font-size: 7px;
     }
 
-.m06-compass {
-    position: absolute;
-    right: 12%;
-    top: 7%;
-    display: grid;
-    justify-items: center;
-    gap: 4px;
-    font-size: 9px;
+
+/* =========================================================
+   ESTADOS DINÁMICOS
+   ========================================================= */
+
+.op-map-m06 .m06-assessment,
+.op-map-m06 .m06-route-status,
+.op-map-m06 .m06-contingency {
+    z-index: 25;
+    padding: 6px 9px;
+    border-radius: 8px;
+    background: rgba(8,28,31,.95);
+    border: 1px solid rgba(57,217,192,.28);
+    color: #9bd1c1;
+    font-size: 8px;
 }
 
-    .m06-compass span {
-        width: 1px;
-        height: 24px;
-        background: rgba(255,255,255,.35);
-    }
 
-.m06-map-note {
-    position: absolute;
-    left: 3%;
-    bottom: 2%;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: rgba(255,255,255,.38);
-    font-size: 9px;
+/* Evitar que estos mensajes se conviertan
+   en nuevos elementos territoriales */
+
+.op-map-m06 .m06-assessment {
+    left: 35%;
+    top: 8%;
 }
+
+.op-map-m06 .m06-route-status {
+    left: 35%;
+    top: 76%;
+}
+
+.op-map-m06 .m06-contingency {
+    right: 7%;
+    left: auto;
+    top: 92%;
+}
+
+
+/* =========================================================
+   POBLACIÓN
+   ========================================================= */
+
+.op-map-m06 .m06-population {
+    position: absolute;
+    right: 7%;
+    left: auto;
+    bottom: 4%;
+    z-index: 30;
+    padding: 7px 10px;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 9px;
+    background: rgba(8,24,30,.96);
+}
+
+
+/* =========================================================
+   EVACUACIÓN
+   ========================================================= */
+
+.op-map-m06 .m06-evacuation-flow {
+    position: absolute;
+    left: 35%;
+    bottom: 4%;
+    z-index: 30;
+    padding: 7px 10px;
+    border: 1px solid rgba(57,217,192,.30);
+    border-radius: 9px;
+    background: rgba(10,38,34,.96);
+}
+
+
+/* =========================================================
+   ELIMINAR ELEMENTO DECORATIVO INFERIOR
+   ========================================================= */
+
+.op-map-m06 .m06-map-note {
+    display: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 900px) {
-    .m06-situation-strip,
-    .m06-network-strip {
+
+    .command-hud-m06 .m06-situation-strip {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .m06-population-line {
-        grid-template-columns: 1fr 1fr;
+    .command-hud-m06 .m06-network-strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .m06-population-track {
-        grid-column: 1 / -1;
+    .command-hud-m06 .command-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================================
+   M06 · AJUSTE DE ESCALA VISUAL
+   Reducir tarjetas y recuperar apariencia minimalista
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   INFRAESTRUCTURA
+   --------------------------------------------------------- */
+
+.op-map-m06 .m06-critical,
+.op-map-m06 .m06-comms,
+.op-map-m06 .m06-shelter {
+    width: 190px;
+    min-height: 46px;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    gap: 8px;
+    border-radius: 11px;
+    background: rgba(7, 23, 29, .94);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+    font-size: 9px;
+}
+
+
+    /* Iconos */
+
+    .op-map-m06 .m06-critical > svg,
+    .op-map-m06 .m06-comms > svg,
+    .op-map-m06 .m06-shelter > svg {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 auto;
     }
 
-    .op-map-m06 .m06-map-canvas {
-        min-height: 500px;
+
+    /* Nombre */
+
+    .op-map-m06 .m06-critical strong,
+    .op-map-m06 .m06-comms strong,
+    .op-map-m06 .m06-shelter strong {
+        display: block;
+        margin: 0;
+        font-size: 9px;
+        line-height: 1.15;
+        font-weight: 800;
+        letter-spacing: .045em;
     }
+
+
+    /* Estado */
+
+    .op-map-m06 .m06-critical small,
+    .op-map-m06 .m06-comms small,
+    .op-map-m06 .m06-shelter small {
+        display: block;
+        margin-top: 2px;
+        font-size: 7px;
+        line-height: 1.1;
+        color: rgba(255,255,255,.42);
+    }
+
+
+    /* ---------------------------------------------------------
+   POSICIÓN DE LAS INFRAESTRUCTURAS
+   --------------------------------------------------------- */
+
+    .op-map-m06 .m06-critical.power {
+        left: auto;
+        right: 7%;
+        top: 8%;
+    }
+
+.op-map-m06 .m06-comms {
+    left: auto;
+    right: 7%;
+    top: 24%;
+}
+
+.op-map-m06 .m06-critical.water {
+    left: auto;
+    right: 7%;
+    top: 43%;
+}
+
+.op-map-m06 .m06-critical.hospital {
+    left: auto;
+    right: 7%;
+    top: 61%;
+}
+
+.op-map-m06 .m06-shelter {
+    left: auto;
+    right: 7%;
+    top: 78%;
+}
+
+
+/* ---------------------------------------------------------
+   SECTORES
+   --------------------------------------------------------- */
+
+.op-map-m06 .m06-sector {
+    width: 185px;
+    min-height: 76px;
+    box-sizing: border-box;
+    padding: 9px 10px;
+    border-radius: 12px;
+    background: rgba(10, 28, 34, .92);
+    border: 1px solid rgba(255,255,255,.09);
+}
+
+
+/* Posiciones */
+
+/* =========================================================
+   M06 · SECTORES SIN SOLAPAMIENTO
+   ========================================================= */
+
+.op-map-m06 .m06-sector {
+    position: absolute;
+    left: 5%;
+    width: 185px;
+    height: 76px;
+    min-height: 76px;
+    box-sizing: border-box;
+    padding: 9px 10px;
+    z-index: 15;
+    border-radius: 12px;
+    background: rgba(10, 28, 34, .92);
+    border: 1px solid rgba(255,255,255,.09);
+    overflow: hidden;
+}
+
+
+.op-map-m06 .sector-a {
+    top: 50%;
+}
+
+.op-map-m06 .sector-b {
+    top: calc(50% + 92px);
+}
+
+.op-map-m06 .sector-c {
+    top: calc(50% + 184px);
+}
+
+
+/* Título */
+
+.op-map-m06 .m06-sector-title {
+    font-size: 8px;
+    line-height: 1;
+    letter-spacing: .08em;
+}
+
+
+/* Viviendas */
+
+.op-map-m06 .m06-houses {
+    gap: 4px;
+    margin-top: 7px;
+}
+
+.op-map-m06 .m06-house {
+    width: 11px;
+    height: 8px;
+}
+
+
+/* Población */
+
+.op-map-m06 .m06-sector > span {
+    margin-top: 5px;
+    font-size: 8px;
+    color: rgba(255,255,255,.42);
+}
+
+
+/* ---------------------------------------------------------
+   CORREDORES
+   --------------------------------------------------------- */
+
+.op-map-m06 .m06-road.main {
+    left: 35%;
+    top: 57%;
+    width: 30%;
+    padding: 7px 10px;
+    font-size: 8px;
+}
+
+.op-map-m06 .m06-road.alternate {
+    left: 35%;
+    top: 72%;
+    width: 28%;
+    padding: 7px 10px;
+    font-size: 8px;
+}
+
+
+/* ---------------------------------------------------------
+   CADENA CRÍTICA
+   --------------------------------------------------------- */
+
+.op-map-m06 .m06-chain-note {
+    left: 35%;
+    right: auto;
+    top: 88%;
+    width: 30%;
+    padding: 7px 9px;
+}
+
+    .op-map-m06 .m06-chain-note strong {
+        font-size: 8px;
+    }
+
+    .op-map-m06 .m06-chain-note span {
+        font-size: 7px;
+    }
+
+
+/* ---------------------------------------------------------
+   POBLACIÓN PROTEGIDA
+   --------------------------------------------------------- */
+
+.op-map-m06 .m06-population {
+    right: 7%;
+    left: auto;
+    bottom: 4%;
+    padding: 7px 10px;
+    font-size: 8px;
+    border-radius: 9px;
+}
+
+
+/* ---------------------------------------------------------
+   ESTADOS DINÁMICOS
+   --------------------------------------------------------- */
+
+.op-map-m06 .m06-assessment,
+.op-map-m06 .m06-route-status,
+.op-map-m06 .m06-contingency {
+    font-size: 7px;
+    padding: 5px 8px;
+}
+
+
+/* Evitamos que los mensajes dinámicos
+   se conviertan en tarjetas grandes */
+
+.op-map-m06 .m06-assessment {
+    left: 35%;
+    top: 8%;
+}
+
+.op-map-m06 .m06-route-status {
+    left: 35%;
+    top: 76%;
+}
+
+.op-map-m06 .m06-contingency {
+    right: 7%;
+    top: 92%;
+}
+
+
+/* ---------------------------------------------------------
+   BRÚJULA
+   --------------------------------------------------------- */
+
+.op-map-m06 .m06-compass {
+    right: 4%;
+    top: 5%;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 50%;
+    background: rgba(7,19,25,.82);
+    font-size: 8px;
+}
+
+
+/* ---------------------------------------------------------
+   RÍO
+   --------------------------------------------------------- */
+
+.op-map-m06 .m06-river {
+    left: -4%;
+    right: auto;
+    top: 35%;
+    width: 108%;
+    height: 64px;
+    font-size: 8px;
 }
