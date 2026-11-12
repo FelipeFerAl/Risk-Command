@@ -1,4 +1,4 @@
-# RISK COMMAND --- Gamificador de Gestión del Riesgo
+# PLAN & PREVENT --- Gamificador de Gestión del Riesgo
 
 > **Versión de referencia:** 1.2.1 / interfaz y flujo de misión v1.3\
 > **Tipo de proyecto:** aplicación web académica interactiva\
@@ -10,7 +10,7 @@
 
 ## 1. Descripción general
 
-**RISK COMMAND** es un gamificador académico diseñado para convertir
+**PLAN & PREVENT** es un gamificador académico diseñado para convertir
 conceptos de Gestión del Riesgo en una experiencia de toma de
 decisiones.
 
@@ -118,7 +118,7 @@ están acopladas y una falla puede desencadenar otras.
 
 ``` text
                          ┌───────────────────────┐
-                         │       RISK COMMAND    │
+                         │       PLAN & PREVENT    │
                          │      React + Vite     │
                          └───────────┬───────────┘
                                      │
@@ -162,7 +162,7 @@ están acopladas y una falla puede desencadenar otras.
 # 5. Estructura del proyecto
 
 ``` text
-risk-command/
+plan&prevent/
 │
 ├── index.html
 ├── package.json
@@ -624,7 +624,7 @@ Mostrar consecuencia
 
 # 15. Persistencia
 
-RISK COMMAND tiene dos modos.
+PLAN & PREVENT tiene dos modos.
 
 ## Modo A --- Supabase
 
@@ -748,7 +748,7 @@ created_at
 
 # 17. Autenticación
 
-RISK COMMAND utiliza Supabase Authentication.
+PLAN & PREVENT utiliza Supabase Authentication.
 
 Para simplificar la experiencia del estudiante, la interfaz únicamente
 solicita:
@@ -892,7 +892,7 @@ La aplicación detectará automáticamente el modo local.
 
 # 22. Publicación en Internet
 
-RISK COMMAND es un frontend Vite y puede publicarse en servicios como:
+PLAN & PREVENT es un frontend Vite y puede publicarse en servicios como:
 
 -   Vercel;
 -   Netlify;
@@ -1250,7 +1250,7 @@ v3.x
 
 # 31. Consideraciones académicas
 
-RISK COMMAND debe entenderse como un **simulador educativo**.
+PLAN & PREVENT debe entenderse como un **simulador educativo**.
 
 Las decisiones y puntuaciones representan un modelo simplificado del
 proceso de gestión del riesgo y no sustituyen:
@@ -1270,7 +1270,7 @@ consecuencias, no para representar fielmente un territorio real.
 
 # 32. Créditos y propósito
 
-**RISK COMMAND** fue desarrollado como un proyecto académico de
+**PLAN & PREVENT** fue desarrollado como un proyecto académico de
 gamificación aplicado a la **Gestión del Riesgo**, integrando conceptos
 de simulación, desarrollo web, persistencia de datos, diseño de
 interfaces y evaluación basada en decisiones.

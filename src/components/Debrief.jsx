@@ -7,7 +7,7 @@ export default function Debrief({ result, onContinue, onRanking }) {
         <div className="app-shell">
             <header className="topbar">
                 <div className="brand">
-                    RISK <span>COMMAND</span>
+                    PLAN <span>& PREVENT</span>
                     <small>v1.3 • Debrief</small>
                 </div>
                 <button className="ghost" onClick={onContinue}>← Misiones</button>

@@ -431,13 +431,13 @@ function App() {
         }
     };
 
-    if (loadingProfile) return <div className="auth-shell"><div className="auth-card card"><div className="eyebrow">RISK COMMAND v1.3</div><h1>Conectando...</h1><p>Verificando tu sesión de estudiante.</p></div></div>;
+    if (loadingProfile) return <div className="auth-shell"><div className="auth-card card"><div className="eyebrow">PLAN & PREVENT v2.0</div><h1>Conectando...</h1><p>Verificando tu sesión de estudiante.</p></div></div>;
 
     if (!profile) {
         return (
             <div className="auth-shell">
                 <div className="auth-card card">
-                    <div className="brand">RISK <span>COMMAND</span><small>v1.3 • Student Operations</small></div>
+                    <div className="brand">PLAN <span>& PREVENT</span><small>v1.3 • Student Operations</small></div>
                     <div className="eyebrow">CENTRO DE IDENTIFICACIÓN</div>
                     <h1>{authMode === "login" ? "Ingresa a tu operación" : "Registra tu identidad"}</h1>
                     <p className="auth-copy">{isSupabaseConfigured ? "Tus misiones y XP se guardarán en la base de datos central." : "Modo local activo. Puedes probar el sistema mientras configuras Supabase."}</p>
@@ -472,7 +472,7 @@ function App() {
 
                 <header className="topbar">
                     <div className="brand">
-                        RISK <span>COMMAND</span>
+                        PLAN <span>& PREVENT</span>
                         <small>v1.3 • Student Operations</small>
                     </div>
 
@@ -606,7 +606,7 @@ function App() {
     return (
         <div className="app-shell">
             <header className="topbar">
-                <div className="brand">RISK <span>COMMAND</span><small>v1.3 • Student Operations</small></div>
+                <div className="brand">PLAN <span>& PREVENT</span><small>v1.3 • Student Operations</small></div>
                 <nav>
                     <button className={view === "dashboard" ? "nav-active" : ""} onClick={() => setView("dashboard")}>Centro</button>
                     <button className={view === "missions" ? "nav-active" : ""} onClick={() => setView("missions")}>Misiones</button>
@@ -616,7 +616,7 @@ function App() {
             </header>
 
             {view === "dashboard" && <main className="main">
-                <section className="command-banner"><div><div className="eyebrow">CENTRO DE MANDO • ESTUDIANTE</div><h1>Gestiona el riesgo.<br /><span className="accent">Decide bajo presión.</span></h1><p>Completa escenarios avanzados, acumula XP y escala posiciones en la clasificación de estudiantes.</p><button className="primary" onClick={() => setView("missions")}>INICIAR OPERACIÓN</button></div><div className="radar">RISK<br />COMMAND</div></section>
+                <section className="command-banner"><div><div className="eyebrow">CENTRO DE MANDO • ESTUDIANTE</div><h1>Gestiona el riesgo.<br /><span className="accent">Decide bajo presión.</span></h1><p>Completa escenarios avanzados, acumula XP y escala posiciones en la clasificación de estudiantes.</p><button className="primary" onClick={() => setView("missions")}>INICIAR OPERACIÓN</button></div><div className="radar">PLAN<br />& PREVENT</div></section>
                 <section className="dashboard-grid">
                     <div className="card profile-card"><div className="profile-head"><div className="rank-icon">{rank.icon}</div><div><div className="eyebrow">ESTUDIANTE</div><h2>{profile.full_name}</h2></div></div><div className="xp-total">{xp}<small> XP</small></div><div className="progress"><span style={{ width: `${progress}%` }} /></div><p>{nextRank ? `${nextRank.min - xp} XP para ${nextRank.name}` : "Rango máximo alcanzado."}</p></div>
                     <div className="card stat-card"><span>RANGO</span><strong>{rank.icon} {rank.name}</strong><span>MISIONES COMPLETADAS</span><strong>{completed.length}</strong></div>
